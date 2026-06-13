@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23111'/><text x='50' y='63' font-family='system-ui' font-size='42' font-weight='800' text-anchor='middle' fill='white'>S</text></svg>" />
+
+    <!-- Primary Meta Tags -->
+    <title>Sanjai Gopal — Freelance Web Designer &amp; Developer | Salem, Tamil Nadu</title>
+    <meta name="description" content="Sanjai Gopal is a freelance web designer and developer based in Salem, Tamil Nadu. Custom websites for restaurants, salons, real estate, cafés &amp; local businesses. Fast 7-day delivery, affordable pricing from ₹2,999." />
+    <meta name="keywords" content="web designer Salem, web developer Tamil Nadu, freelance web designer India, website design Coimbatore, business website Tamil Nadu, affordable web design India, restaurant website, salon website, real estate website" />
+    <meta name="author" content="Sanjai Gopal" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://sanjai-alpha.vercel.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sanjai-alpha.vercel.app/" />
+    <meta property="og:title" content="Sanjai Gopal — Freelance Web Designer &amp; Developer | Salem, Tamil Nadu" />
+    <meta property="og:description" content="Custom websites for local businesses — restaurants, salons, real estate, cafés, and more. Fast 7-day delivery, professional design, starting from ₹2,999." />
+    <meta property="og:image" content="https://sanjai-alpha.vercel.app/images/sanjai_profile_1779608356548.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sanjai Gopal — Web Designer &amp; Developer" />
+    <meta property="og:site_name" content="Sanjai Gopal Portfolio" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://sanjai-alpha.vercel.app/" />
+    <meta name="twitter:title" content="Sanjai Gopal — Freelance Web Designer &amp; Developer" />
+    <meta name="twitter:description" content="Custom websites for local businesses in Tamil Nadu. 7-day delivery, professional design, starting from ₹2,999." />
+    <meta name="twitter:image" content="https://sanjai-alpha.vercel.app/images/sanjai_profile_1779608356548.jpg" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://sanjai-alpha.vercel.app/#person","name":"Sanjai Gopal","jobTitle":"Freelance Web Designer & Developer","url":"https://sanjai-alpha.vercel.app/","image":"https://sanjai-alpha.vercel.app/images/sanjai_profile_1779608356548.jpg","email":"sanjai.sparkmail@gmail.com","telephone":"+919363265552","address":{"@type":"PostalAddress","addressLocality":"Salem","addressRegion":"Tamil Nadu","addressCountry":"IN"},"sameAs":["https://linkedin.com/in/sanjai2306","https://instagram.com/hey.sanjai_"]},{"@type":"LocalBusiness","@id":"https://sanjai-alpha.vercel.app/#business","name":"Sanjai Gopal — Web Design & Development","url":"https://sanjai-alpha.vercel.app/","telephone":"+919363265552","email":"sanjai.sparkmail@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Salem","addressRegion":"Tamil Nadu","addressCountry":"IN"},"priceRange":"₹₹","hasOfferCatalog":{"@type":"OfferCatalog","name":"Web Design Services","itemListElement":[{"@type":"Offer","name":"Landing Page","price":"2999","priceCurrency":"INR"},{"@type":"Offer","name":"Business Website","price":"4999","priceCurrency":"INR"},{"@type":"Offer","name":"Online Store","price":"9999","priceCurrency":"INR"}]}}]}</script>
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#f2f2ee" />
+    <meta name="color-scheme" content="light" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Sanjai G" />
+
+    <!-- Preconnect font origins (must come BEFORE font stylesheet) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!--
+      Non-render-blocking font load:
+      media="print" trick defers parse; onload flips to media="all"
+      font-display=swap is in the Google URL so text is visible immediately
+      Only load weights actually used: Bricolage 700+800, Inter 400+600
+    -->
+    <link
+      rel="stylesheet"
+      media="print"
+      onload="this.onload=null;this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;600&display=swap"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;600&display=swap" />
+    </noscript>
+
+    <!--
+      LCP image preload — profile.webp IS the above-fold hero/about image.
+      imagesrcset lets the browser pick the right size.
+      fetchpriority=high pushes it to the top of the preload queue.
+    -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/profile-800.webp"
+      imagesrcset="/images/profile-400.webp 400w, /images/profile-800.webp 800w"
+      imagesizes="(max-width: 640px) 260px, 400px"
+      fetchpriority="high"
+      type="image/webp"
+    />
+
+    <!-- Critical CSS inlined — eliminates render-blocking stylesheet, establishes layout for FCP -->
+    <style>
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      html{scroll-behavior:smooth;overflow-x:hidden}
+      body{
+        background:#f2f2ee;color:#111;
+        font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+        -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+        overflow-x:hidden
+      }
+      h1,h2,h3,h4,h5,h6,.display{
+        font-family:'Bricolage Grotesque',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif
+      }
+      #root{min-height:100vh}
+      img{display:block;max-width:100%;height:auto}
+      button{font-family:inherit}
+      a{text-decoration:none}
+      /* Skip link */
+      .skip-link{
+        position:absolute;top:-100%;left:8px;z-index:10000;
+        background:#111;color:#fff;padding:10px 20px;border-radius:0 0 8px 8px;
+        font-size:14px;font-weight:600;transition:top .15s
+      }
+      .skip-link:focus{top:0}
+      /* Scroll progress bar */
+      .scroll-progress{
+        position:fixed;top:0;left:0;height:3px;
+        background:linear-gradient(90deg,#22c55e,#16a34a);
+        z-index:9999;transform-origin:left;transition:width .1s linear;
+        will-change:width
+      }
+      /* Float WA button */
+      .float-wa{
+        position:fixed;bottom:20px;right:20px;z-index:999;
+        width:52px;height:52px;border-radius:50%;
+        background:#25d366;display:flex;align-items:center;justify-content:center;
+        box-shadow:0 4px 20px rgba(37,211,102,.4);
+        transition:transform .2s,box-shadow .2s
+      }
+      .float-wa:hover{transform:scale(1.12);box-shadow:0 8px 32px rgba(37,211,102,.5)}
+      @media(min-width:768px){.float-wa{bottom:28px;right:28px;width:56px;height:56px}}
+      /* Container */
+      .container{width:100%;max-width:1200px;margin:0 auto;padding:0 20px;box-sizing:border-box}
+      @media(min-width:640px){.container{padding:0 32px}}
+      @media(min-width:1024px){.container{padding:0 48px}}
+      /* Section spacing */
+      .section{padding:80px 0}
+      @media(min-width:640px){.section{padding:96px 0}}
+      @media(min-width:768px){.section{padding:112px 0}}
+      @media(min-width:1024px){.section{padding:128px 0}}
+      /* content-visibility for off-screen sections */
+      #about,#services,#projects,#why,#testimonials,#contact{
+        content-visibility:auto;contain-intrinsic-size:0 600px
+      }
+      /* Loading skeleton placeholder */
+      .section-placeholder{min-height:400px}
+      /* Marquee animation */
+      @keyframes marquee{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-50%,0,0)}}
+      .marquee{animation:marquee 30s linear infinite;will-change:transform}
+      @media(prefers-reduced-motion:reduce){.marquee{animation:none}}
+      /* Pulse dot */
+      @keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.5}}
+      /* Blink cursor */
+      @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+      /* Btn base */
+      .btn{
+        display:inline-flex;align-items:center;gap:8px;
+        padding:14px 28px;border-radius:99px;
+        font-size:15px;font-weight:600;cursor:pointer;
+        border:none;font-family:inherit;white-space:nowrap;line-height:1;
+        text-decoration:none;
+        transition:transform .15s ease,box-shadow .2s ease,background .2s ease,color .2s ease
+      }
+      .btn:active{transform:scale(.97)!important}
+      .btn-dark{background:#111;color:#fff}
+      .btn-dark:hover{background:#1a1a1a;transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.22)}
+      .btn-ghost{background:transparent;color:#111;border:2px solid #111}
+      .btn-ghost:hover{background:#111;color:#fff;transform:translateY(-2px)}
+      .btn-green{background:#22c55e;color:#fff}
+      .btn-green:hover{background:#16a34a;transform:translateY(-2px);box-shadow:0 8px 28px rgba(34,197,94,.32)}
+      .btn-glass{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15)}
+      .btn-glass:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+      /* Check item */
+      .check-item{
+        display:flex;align-items:flex-start;gap:10px;
+        font-size:14px;color:#555;line-height:1.55
+      }
+      .check-item::before{
+        content:'';display:block;width:20px;height:20px;min-width:20px;
+        background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/12px no-repeat,#dcfce7;
+        border-radius:50%;margin-top:1px;flex-shrink:0
+      }
+      /* Card */
+      .card{background:#fff;border:1.5px solid #e8e8e3;border-radius:20px;
+        transition:box-shadow .3s ease,transform .3s ease,border-color .3s ease}
+      .card:hover{box-shadow:0 12px 48px rgba(0,0,0,.09);transform:translateY(-4px);border-color:#ddd}
+      /* Label */
+      .label{
+        display:inline-flex;align-items:center;gap:8px;
+        font-size:11px;font-weight:700;color:#888;
+        letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px
+      }
+      .label::before{
+        content:'';display:block;width:22px;height:2px;
+        background:#22c55e;border-radius:2px;flex-shrink:0
+      }
+      /* sr-only */
+      .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+      /* Tag */
+      .tag{display:inline-flex;align-items:center;padding:4px 11px;border-radius:99px;
+        background:#e8e8e3;color:#444;font-size:11px;font-weight:600;
+        border:1px solid #e5e5e0;letter-spacing:.02em}
+      /* Grids */
+      .grid-3{display:grid;grid-template-columns:1fr;gap:20px}
+      @media(min-width:640px){.grid-3{grid-template-columns:repeat(2,1fr);gap:20px}}
+      @media(min-width:1024px){.grid-3{grid-template-columns:repeat(3,1fr);gap:24px}}
+      .grid-2{display:grid;grid-template-columns:1fr;gap:20px}
+      @media(min-width:640px){.grid-2{grid-template-columns:repeat(2,1fr);gap:24px}}
+      /* Icon box */
+      .icon-box{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:14px;flex-shrink:0}
+      /* Scrollbar */
+      ::-webkit-scrollbar{width:4px}
+      ::-webkit-scrollbar-track{background:#f2f2ee}
+      ::-webkit-scrollbar-thumb{background:#d0d0cc;border-radius:4px}
+      ::selection{background:#d4f0d4;color:#111}
+      :focus-visible{outline:2px solid #22c55e;outline-offset:3px;border-radius:4px}
+      /* Reduced motion */
+      @media(prefers-reduced-motion:reduce){
+        *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
