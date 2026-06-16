@@ -25,7 +25,7 @@ const TESTIMONIALS = [
     init: 'AV', color: '#f59e0b',
   },
   {
-    name: 'Meena Krishnan', biz: "Meena's Café",             loc: 'Trichy, TN',
+    name: 'Likitha Sanjai', biz: "Likitha's Café",             loc: 'Trichy, TN',
     text: 'Affordable, fast, and high quality. Sanjai was always available to answer my questions and made the whole process stress-free. 10/10.',
     init: 'MK', color: '#f43f5e',
   },
