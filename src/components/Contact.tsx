@@ -504,8 +504,9 @@ const CONTACT_CARDS: ReadonlyArray<{
 /* ─── Main Contact section ──────────────── */
 export default memo(function Contact() {
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="section" style={{ background: '#f2f2ee' }}>
-      <div className="container">
+    <section id="contact" aria-labelledby="contact-heading" className="section" style={{ background: '#f2f2ee', position: 'relative', overflow: 'hidden' }}>
+      <ContactBg />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
 
         {/* Header */}
         <motion.div

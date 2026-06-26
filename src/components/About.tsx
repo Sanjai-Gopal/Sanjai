@@ -230,8 +230,9 @@ const VP = { once: true, margin: '-80px' as const };
 
 export default memo(function About() {
   return (
-    <section id="about" className="section" aria-labelledby="about-heading" style={{ background: '#f2f2ee' }}>
-      <div className="container">
+    <section id="about" className="section" aria-labelledby="about-heading" style={{ background: '#f2f2ee', position: 'relative', overflow: 'hidden' }}>
+      <AboutBg />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className="about-grid">
 
           {/* Profile image */}

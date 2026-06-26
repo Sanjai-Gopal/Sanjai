@@ -244,8 +244,9 @@ const ProjectCard = memo(({ p, index }: { p: typeof PROJECTS[0]; index: number }
 
 export default memo(function Projects() {
   return (
-    <section id="projects" className="section" aria-labelledby="projects-heading" style={{ background: '#f2f2ee' }}>
-      <div className="container">
+    <section id="projects" className="section" aria-labelledby="projects-heading" style={{ background: '#f2f2ee', position: 'relative', overflow: 'hidden' }}>
+      <ProjectsBg />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}

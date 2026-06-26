@@ -198,8 +198,9 @@ const TestimonialCard = memo(({ t, index }: { t: typeof TESTIMONIALS[0]; index: 
 
 export default memo(function Testimonials() {
   return (
-    <section id="testimonials" aria-labelledby="testimonials-heading" className="section" style={{ background: '#f2f2ee' }}>
-      <div className="container">
+    <section id="testimonials" aria-labelledby="testimonials-heading" className="section" style={{ background: '#f2f2ee', position: 'relative', overflow: 'hidden' }}>
+      <TestimonialsBg />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
 
         <motion.div
           initial={{ opacity: 0, y: 22 }}

@@ -8,79 +8,14 @@ const MARQUEE = ['React', 'Next.js', 'Tailwind CSS', 'Node.js', 'TypeScript', 'S
 const MARQUEE_DUPED = [...MARQUEE, ...MARQUEE];
 
 /* ═══════════════════════════════════════════════════
-   PREMIUM FLOATING GLASS PANEL
+   GRADIENT GLOWING RING
 ═══════════════════════════════════════════════════ */
-const FloatingGlassPanel = memo(({
-  children,
-  delay = 0,
-  x = 0,
-  y = 0,
-  rotate = 0,
-  style,
-}: {
-  children?: React.ReactNode;
-  delay?: number;
-  x?: number;
-  y?: number;
-  rotate?: number;
-  style?: React.CSSProperties;
+const GlowRing = memo(({ size, top, left, right, delay = 0, speed = 28, opacity = 0.14 }: {
+  size: number; top?: string; left?: string; right?: string;
+  delay?: number; speed?: number; opacity?: number;
 }) => (
   <motion.div
-    style={{
-      position: 'absolute',
-      background: 'linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.65) 100%)',
-      backdropFilter: 'blur(16px)',
-      WebkitBackdropFilter: 'blur(16px)',
-      border: '1px solid rgba(255,255,255,0.5)',
-      borderRadius: 18,
-      boxShadow: `
-        0 8px 32px rgba(0,0,0,0.08),
-        0 2px 8px rgba(0,0,0,0.04),
-        inset 0 1px 0 rgba(255,255,255,0.8)
-      `,
-      x,
-      y,
-      rotate,
-      ...style,
-    }}
-    initial={{ opacity: 0, y: y + 30, rotate: rotate - 8 }}
-    animate={{
-      opacity: 1,
-      y: [y, y - 12, y],
-      rotate: [rotate, rotate + 1.5, rotate],
-    }}
-    transition={{
-      opacity: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] },
-      y: { duration: 7, delay: delay + 0.5, repeat: Infinity, ease: 'easeInOut' },
-      rotate: { duration: 9, delay, repeat: Infinity, ease: 'easeInOut' },
-    }}
     aria-hidden="true"
-  >
-    <div style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: '40%',
-      background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)',
-      borderRadius: '18px 18px 0 0',
-    }} />
-    {children}
-  </motion.div>
-));
-
-/* ═══════════════════════════════════════════════════
-   PREMIUM 3D RING
-═══════════════════════════════════════════════════ */
-const RotatingRing = memo(({ size, top, left, right, borderWidth = 2, delay = 0 }: {
-  size: number;
-  top?: string;
-  left?: string;
-  right?: string;
-  borderWidth?: number;
-  delay?: number;
-}) => (
-  <motion.div
     style={{
       position: 'absolute',
       width: size,
@@ -89,21 +24,176 @@ const RotatingRing = memo(({ size, top, left, right, borderWidth = 2, delay = 0 
       left,
       right,
       borderRadius: '50%',
-      border: `${borderWidth}px solid rgba(34,197,94,0.12)`,
-      boxShadow: `0 0 24px rgba(34,197,94,0.06), inset 0 0 24px rgba(34,197,94,0.06)`,
+      border: '1.5px solid transparent',
+      backgroundImage: `conic-gradient(from 0deg, transparent 0%, rgba(34,197,94,${opacity}) 20%, rgba(34,197,94,${opacity * 0.4}) 50%, transparent 70%)`,
+      backgroundOrigin: 'border-box',
+      WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+      WebkitMaskComposite: 'destination-out',
+      maskComposite: 'exclude',
       pointerEvents: 'none',
+      willChange: 'transform',
     }}
-    animate={{
-      rotate: [0, 360],
-      scale: [1, 1.02, 1],
-    }}
-    transition={{
-      rotate: { duration: 28, delay, repeat: Infinity, ease: 'linear' },
-      scale: { duration: 7, delay, repeat: Infinity, ease: 'easeInOut' },
-    }}
-    aria-hidden="true"
+    animate={{ rotate: [0, 360] }}
+    transition={{ duration: speed, delay, repeat: Infinity, ease: 'linear' }}
   />
 ));
+
+/* ═══════════════════════════════════════════════════
+   STATIC AMBIENT RING (no conic gradient)
+═══════════════════════════════════════════════════ */
+const AmbientRing = memo(({ size, top, left, right, delay = 0 }: {
+  size: number; top?: string; left?: string; right?: string; delay?: number;
+}) => (
+  <motion.div
+    aria-hidden="true"
+    style={{
+      position: 'absolute',
+      width: size,
+      height: size,
+      top,
+      left,
+      right,
+      borderRadius: '50%',
+      border: '1px solid rgba(34,197,94,0.1)',
+      boxShadow: '0 0 28px rgba(34,197,94,0.05), inset 0 0 28px rgba(34,197,94,0.03)',
+      pointerEvents: 'none',
+    }}
+    animate={{ scale: [1, 1.04, 1], opacity: [0.5, 0.9, 0.5] }}
+    transition={{ duration: 7, delay, repeat: Infinity, ease: 'easeInOut' }}
+  />
+));
+
+/* ═══════════════════════════════════════════════════
+   PREMIUM FLOATING GLASS PANEL (content visible)
+═══════════════════════════════════════════════════ */
+const FloatingGlassPanel = memo(({
+  children,
+  delay = 0,
+  floatY = -14,
+  rotate = 0,
+  style,
+}: {
+  children?: React.ReactNode;
+  delay?: number;
+  floatY?: number;
+  rotate?: number;
+  style?: React.CSSProperties;
+}) => (
+  <motion.div
+    style={{
+      position: 'absolute',
+      background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.72) 100%)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      border: '1px solid rgba(255,255,255,0.6)',
+      borderRadius: 20,
+      boxShadow: `
+        0 12px 40px rgba(0,0,0,0.10),
+        0 3px 10px rgba(0,0,0,0.06),
+        inset 0 1.5px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(0,0,0,0.02)
+      `,
+      overflow: 'hidden',
+      ...style,
+    }}
+    initial={{ opacity: 0, y: 30, rotate: rotate - 6, scale: 0.9 }}
+    animate={{
+      opacity: 1,
+      y: [0, floatY, 0],
+      rotate: [rotate, rotate + 1.5, rotate],
+      scale: 1,
+    }}
+    transition={{
+      opacity: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] },
+      scale:   { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] },
+      y:       { duration: 7, delay: delay + 0.5, repeat: Infinity, ease: 'easeInOut' },
+      rotate:  { duration: 9, delay, repeat: Infinity, ease: 'easeInOut' },
+    }}
+    aria-hidden="true"
+  >
+    {/* Top gloss */}
+    <div style={{
+      position: 'absolute', top: 0, left: 0, right: 0, height: '42%',
+      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+      borderRadius: '20px 20px 0 0',
+      pointerEvents: 'none',
+    }} />
+    {children}
+  </motion.div>
+));
+
+/* ═══════════════════════════════════════════════════
+   3D PERSPECTIVE GRID
+═══════════════════════════════════════════════════ */
+const PerspGrid = memo(() => (
+  <div
+    aria-hidden="true"
+    style={{
+      position: 'absolute', bottom: 0, left: 0, right: 0,
+      height: 240, pointerEvents: 'none', overflow: 'hidden',
+      perspective: 400, perspectiveOrigin: '50% 0%',
+    }}
+  >
+    <motion.div
+      style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: `
+          linear-gradient(rgba(34,197,94,0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(34,197,94,0.08) 1px, transparent 1px)
+        `,
+        backgroundSize: '48px 48px',
+        transform: 'rotateX(55deg) translateY(-20px) scale(1.6)',
+        transformOrigin: 'bottom center',
+        maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, black 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, black 100%)',
+      }}
+      animate={{ y: ['-20px', '8px', '-20px'] }}
+      transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+    />
+    {/* Glow line on horizon */}
+    <div style={{
+      position: 'absolute', top: 0, left: 0, right: 0, height: 1,
+      background: 'linear-gradient(90deg, transparent, rgba(34,197,94,0.3), transparent)',
+    }} />
+  </div>
+));
+
+/* ═══════════════════════════════════════════════════
+   FLOATING CUBE (true 3D with faces)
+═══════════════════════════════════════════════════ */
+const Cube3D = memo(({ top, left, size = 52, delay = 0 }: {
+  top: string; left: string; size?: number; delay?: number;
+}) => {
+  const half = size / 2;
+  const faceStyle: React.CSSProperties = {
+    position: 'absolute',
+    width: size,
+    height: size,
+    background: 'linear-gradient(135deg, rgba(34,197,94,0.1) 0%, rgba(34,197,94,0.03) 100%)',
+    border: '1px solid rgba(34,197,94,0.2)',
+    backdropFilter: 'blur(3px)',
+  };
+  return (
+    <motion.div
+      aria-hidden="true"
+      style={{
+        position: 'absolute', top, left,
+        width: size, height: size,
+        transformStyle: 'preserve-3d',
+        perspective: 600,
+      }}
+      animate={{ rotateX: [0, 360], rotateY: [0, 360], y: [0, -20, 8, 0] }}
+      transition={{ duration: 22, delay, repeat: Infinity, ease: 'linear' }}
+    >
+      <div style={{ ...faceStyle, transform: `translateZ(${half}px)` }} />
+      <div style={{ ...faceStyle, transform: `rotateY(180deg) translateZ(${half}px)` }} />
+      <div style={{ ...faceStyle, transform: `rotateY(90deg) translateZ(${half}px)` }} />
+      <div style={{ ...faceStyle, transform: `rotateY(-90deg) translateZ(${half}px)` }} />
+      <div style={{ ...faceStyle, transform: `rotateX(90deg) translateZ(${half}px)` }} />
+      <div style={{ ...faceStyle, transform: `rotateX(-90deg) translateZ(${half}px)` }} />
+    </motion.div>
+  );
+});
 
 /* ═══════════════════════════════════════════════════
    PREMIUM STAT CARD (3D Floating)
@@ -115,14 +205,8 @@ const StatCard = memo(({ v, l, index }: { v: string; l: string; index: number })
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
-  const rotateX = useSpring(useTransform(mouseY, [0, 1], [5, -5]), {
-    stiffness: 180,
-    damping: 22,
-  });
-  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-5, 5]), {
-    stiffness: 180,
-    damping: 22,
-  });
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [7, -7]), { stiffness: 200, damping: 22 });
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-7, 7]), { stiffness: 200, damping: 22 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
@@ -134,33 +218,22 @@ const StatCard = memo(({ v, l, index }: { v: string; l: string; index: number })
   return (
     <motion.div
       ref={cardRef}
-      style={{
-        rotateX,
-        rotateY,
-        transformPerspective: 700,
-        transformStyle: 'preserve-3d',
-        zIndex: isHovered ? 10 : 1,
-      }}
+      style={{ rotateX, rotateY, transformPerspective: 700, transformStyle: 'preserve-3d', zIndex: isHovered ? 10 : 1, position: 'relative' }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        mouseX.set(0.5);
-        mouseY.set(0.5);
-      }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08 + 0.5, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      onMouseLeave={() => { setIsHovered(false); mouseX.set(0.5); mouseY.set(0.5); }}
+      initial={{ opacity: 0, y: 24, scale: 0.94 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay: index * 0.09 + 0.55, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ scale: 1.04 }}
     >
       {/* Ambient glow */}
       <motion.div
         aria-hidden="true"
         style={{
-          position: 'absolute',
-          inset: -6,
-          borderRadius: 22,
-          background: 'radial-gradient(circle, rgba(34,197,94,0.12), transparent 70%)',
-          filter: 'blur(16px)',
+          position: 'absolute', inset: -8, borderRadius: 24,
+          background: 'radial-gradient(circle, rgba(34,197,94,0.15), transparent 70%)',
+          filter: 'blur(18px)',
           opacity: isHovered ? 1 : 0,
           transition: 'opacity 0.35s ease',
           pointerEvents: 'none',
@@ -169,53 +242,47 @@ const StatCard = memo(({ v, l, index }: { v: string; l: string; index: number })
 
       <div style={{
         position: 'relative',
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 100%)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        border: '1px solid rgba(255,255,255,0.55)',
-        borderRadius: 18,
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.88) 100%)',
+        backdropFilter: 'blur(18px)',
+        WebkitBackdropFilter: 'blur(18px)',
+        border: '1px solid rgba(255,255,255,0.6)',
+        borderRadius: 20,
         padding: 'clamp(16px, 2.5vw, 24px) clamp(10px, 1.5vw, 18px)',
         textAlign: 'center',
         boxShadow: `
-          0 6px 20px rgba(0,0,0,0.05),
-          0 2px 6px rgba(0,0,0,0.03),
-          inset 0 1px 0 rgba(255,255,255,0.9),
+          0 8px 28px rgba(0,0,0,0.07),
+          0 2px 8px rgba(0,0,0,0.04),
+          inset 0 1.5px 0 rgba(255,255,255,0.95),
           inset 0 -1px 0 rgba(0,0,0,0.01)
         `,
-        transition: 'box-shadow 0.3s ease',
+        overflow: 'hidden',
       }}>
-        {/* Inner highlight */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '32%',
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.45) 0%, transparent 100%)',
-            borderRadius: '18px 18px 0 0',
-            pointerEvents: 'none',
+        {/* Top gloss */}
+        <div aria-hidden="true" style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '40%',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+          borderRadius: '20px 20px 0 0', pointerEvents: 'none',
+        }} />
+        {/* Light sweep on hover */}
+        {isHovered && (
+          <motion.div aria-hidden="true" style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
           }}
-        />
-
+          initial={{ transform: 'translateX(-100%)' }}
+          animate={{ transform: 'translateX(100%)' }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+          />
+        )}
         <div className="display" style={{
-          fontWeight: 800,
-          fontSize: 'clamp(17px, 3.5vw, 27px)',
-          color: '#111',
-          lineHeight: 1,
-          marginBottom: 5,
-          letterSpacing: '-0.02em',
+          fontWeight: 800, fontSize: 'clamp(17px, 3.5vw, 27px)',
+          color: '#111', lineHeight: 1, marginBottom: 5, letterSpacing: '-0.02em',
         }}>
           {v}
         </div>
         <div style={{
-          fontSize: 'clamp(9px, 1.4vw, 12px)',
-          color: '#888',
-          fontWeight: 600,
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase',
-          lineHeight: 1.3,
+          fontSize: 'clamp(9px, 1.4vw, 11px)', color: '#888', fontWeight: 600,
+          letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: 1.3,
         }}>
           {l}
         </div>
@@ -234,10 +301,7 @@ const WaIcon = memo(() => (
 ));
 
 const PremiumButton = memo(({
-  children,
-  variant = 'dark',
-  href,
-  onClick
+  children, variant = 'dark', href, onClick,
 }: {
   children: React.ReactNode;
   variant?: 'dark' | 'ghost' | 'green';
@@ -250,14 +314,8 @@ const PremiumButton = memo(({
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
-  const springX = useSpring(useTransform(mouseX, [0, 1], [-4, 4]), {
-    stiffness: 140,
-    damping: 14,
-  });
-  const springY = useSpring(useTransform(mouseY, [0, 1], [-3, 3]), {
-    stiffness: 140,
-    damping: 14,
-  });
+  const springX = useSpring(useTransform(mouseX, [0, 1], [-5, 5]), { stiffness: 150, damping: 16 });
+  const springY = useSpring(useTransform(mouseY, [0, 1], [-3, 3]), { stiffness: 150, damping: 16 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!buttonRef.current) return;
@@ -266,24 +324,24 @@ const PremiumButton = memo(({
     mouseY.set((e.clientY - rect.top) / rect.height);
   };
 
-  const variants: Record<string, { bg: string; color: string; border: string; glow: string }> = {
+  const variants: Record<string, { bg: string; color: string; border: string; glow: string; shadow: string }> = {
     dark: {
       bg: 'linear-gradient(135deg, #111 0%, #222 100%)',
-      color: '#fff',
-      border: 'rgba(255,255,255,0.1)',
-      glow: 'rgba(0,0,0,0.22)',
+      color: '#fff', border: 'rgba(255,255,255,0.1)',
+      glow: 'rgba(0,0,0,0.2)',
+      shadow: '0 6px 28px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.12)',
     },
     ghost: {
-      bg: 'transparent',
-      color: '#111',
-      border: 'rgba(17,17,17,0.9)',
-      glow: 'rgba(17,17,17,0.12)',
+      bg: 'rgba(255,255,255,0.6)',
+      color: '#111', border: 'rgba(17,17,17,0.7)',
+      glow: 'rgba(17,17,17,0.08)',
+      shadow: '0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)',
     },
     green: {
       bg: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-      color: '#fff',
-      border: 'rgba(34,197,94,0.25)',
-      glow: 'rgba(34,197,94,0.3)',
+      color: '#fff', border: 'rgba(34,197,94,0.3)',
+      glow: 'rgba(34,197,94,0.35)',
+      shadow: '0 6px 28px rgba(34,197,94,0.35), inset 0 1px 0 rgba(255,255,255,0.2)',
     },
   };
 
@@ -293,81 +351,46 @@ const PremiumButton = memo(({
     <motion.div
       ref={buttonRef}
       style={{
-        position: 'relative',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 10,
-        padding: '17px 34px',
-        borderRadius: 99,
-        fontSize: 15,
-        fontWeight: 600,
-        fontFamily: 'inherit',
-        cursor: 'pointer',
-        textDecoration: 'none',
-        background: v.bg,
-        color: v.color,
-        border: `1.5px solid ${v.border}`,
-        boxShadow: `
-          0 5px 22px ${v.glow},
-          inset 0 1px 0 ${variant === 'ghost' ? 'transparent' : 'rgba(255,255,255,0.12)'}
-        `,
-        x: springX,
-        y: springY,
-        overflow: 'hidden',
+        position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 10,
+        padding: '17px 34px', borderRadius: 99, fontSize: 15, fontWeight: 600,
+        fontFamily: 'inherit', cursor: 'pointer', textDecoration: 'none',
+        background: v.bg, color: v.color, border: `1.5px solid ${v.border}`,
+        boxShadow: v.shadow, x: springX, y: springY, overflow: 'hidden',
+        backdropFilter: variant === 'ghost' ? 'blur(8px)' : 'none',
+        WebkitBackdropFilter: variant === 'ghost' ? 'blur(8px)' : 'none',
       }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        mouseX.set(0.5);
-        mouseY.set(0.5);
-      }}
-      whileHover={{ scale: 1.03, y: -3 }}
-      whileTap={{ scale: 0.98 }}
+      onMouseLeave={() => { setIsHovered(false); mouseX.set(0.5); mouseY.set(0.5); }}
+      whileHover={{ scale: 1.04, y: -3 }}
+      whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Glow effect */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: -2,
-          borderRadius: 'inherit',
-          background: `radial-gradient(circle, ${v.glow}, transparent 70%)`,
-          filter: 'blur(10px)',
-          opacity: isHovered ? 1 : 0,
-          pointerEvents: 'none',
-          transition: 'opacity 0.35s ease',
-          zIndex: -1,
-        }}
-      />
-
+      {/* Outer glow */}
+      <motion.div aria-hidden="true" style={{
+        position: 'absolute', inset: -4, borderRadius: 'inherit',
+        background: `radial-gradient(circle, ${v.glow}, transparent 70%)`,
+        filter: 'blur(12px)',
+        opacity: isHovered ? 1 : 0,
+        pointerEvents: 'none', transition: 'opacity 0.35s ease', zIndex: -1,
+      }} />
       {/* Light sweep */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)',
-          transform: 'translateX(-100%)',
-        }}
-        animate={isHovered ? { transform: 'translateX(100%)' } : { transform: 'translateX(-100%)' }}
-        transition={{ duration: 0.65, ease: 'easeInOut' }}
+      <motion.div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)',
+        transform: 'translateX(-100%)',
+      }}
+      animate={isHovered ? { transform: 'translateX(100%)' } : { transform: 'translateX(-100%)' }}
+      transition={{ duration: 0.65, ease: 'easeInOut' }}
       />
-
       {children}
     </motion.div>
   );
 
   if (href) {
     return (
-      <motion.a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ textDecoration: 'none', display: 'inline-flex' }}
-        whileHover={{ scale: 1.01 }}
-      >
+      <motion.a href={href} target="_blank" rel="noopener noreferrer"
+        style={{ textDecoration: 'none', display: 'inline-flex' }}>
         {content}
       </motion.a>
     );
@@ -381,101 +404,23 @@ const PremiumButton = memo(({
 });
 
 /* ═══════════════════════════════════════════════════
-   FLOATING GEOMETRIC SHAPES
+   FLOATING DIAMOND
 ═══════════════════════════════════════════════════ */
-const FloatingShapes = memo(({ reduced }: { reduced: boolean }) => {
-  if (reduced) return null;
-
-  return (
-    <>
-      {/* Floating cube */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '12%',
-          left: '7%',
-          width: 55,
-          height: 55,
-          transformStyle: 'preserve-3d',
-          transformPerspective: 700,
-        }}
-        animate={{
-          rotateX: [0, 360],
-          rotateY: [0, 360],
-          y: [0, -18, 8, 0],
-        }}
-        transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
-      >
-        {[0, 90, 180, 270].map((deg) => (
-          <div
-            key={deg}
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              background: 'linear-gradient(135deg, rgba(34,197,94,0.12) 0%, rgba(34,197,94,0.04) 100%)',
-              border: '1px solid rgba(34,197,94,0.18)',
-              backdropFilter: 'blur(4px)',
-              transform: `rotateY(${deg}deg) translateZ(28px)`,
-            }}
-          />
-        ))}
-      </motion.div>
-
-      {/* Floating triangle */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '72%',
-          right: '10%',
-          width: 38,
-          height: 38,
-        }}
-        animate={{
-          y: [0, -28, 0],
-          rotate: [0, 180, 360],
-        }}
-        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <div style={{
-          width: 0,
-          height: 0,
-          borderLeft: '19px solid transparent',
-          borderRight: '19px solid transparent',
-          borderBottom: '33px solid rgba(34,197,94,0.1)',
-          filter: 'drop-shadow(0 4px 10px rgba(34,197,94,0.08))',
-        }} />
-      </motion.div>
-
-      {/* Floating diamond */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '28%',
-          right: '5%',
-          width: 28,
-          height: 28,
-        }}
-        animate={{
-          y: [0, 18, -8, 0],
-          rotate: [0, 90, 180, 270, 360],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-      >
-        <div style={{
-          width: 0,
-          height: 0,
-          borderLeft: '14px solid transparent',
-          borderRight: '14px solid transparent',
-          borderBottom: '24px solid rgba(34,197,94,0.08)',
-        }} />
-      </motion.div>
-    </>
-  );
-});
+const FloatingDiamond = memo(() => (
+  <motion.div
+    aria-hidden="true"
+    style={{ position: 'absolute', top: '28%', right: '6%', width: 32, height: 32 }}
+    animate={{ y: [0, -22, 10, 0], rotate: [0, 90, 180, 270, 360] }}
+    transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+  >
+    <div style={{
+      width: 0, height: 0,
+      borderLeft: '16px solid transparent', borderRight: '16px solid transparent',
+      borderBottom: '28px solid rgba(34,197,94,0.12)',
+      filter: 'drop-shadow(0 4px 12px rgba(34,197,94,0.15))',
+    }} />
+  </motion.div>
+));
 
 /* ═══════════════════════════════════════════════════
    MAIN HERO COMPONENT
@@ -532,7 +477,7 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: 'clamp(96px, 16vw, 140px)',
-        paddingBottom: 'clamp(80px, 12vw, 110px)',
+        paddingBottom: 'clamp(100px, 14vw, 130px)',
         overflow: 'hidden',
         position: 'relative',
       }}
@@ -540,75 +485,56 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
       {/* Premium 3D Background */}
       <HeroBg />
 
-      {/* Floating geometric shapes */}
-      <FloatingShapes reduced={reduced} />
+      {/* Perspective grid at bottom */}
+      <PerspGrid />
 
-      {/* Rotating rings */}
+      {/* Gradient glowing rings */}
       {!reduced && (
         <>
-          <RotatingRing size={280} top="-50px" left="4%" delay={0} />
-          <RotatingRing size={160} top="62%" right="7%" delay={3} />
-          <RotatingRing size={90} top="18%" right="16%" delay={6} borderWidth={1} />
+          <GlowRing size={300} top="-60px" left="3%" delay={0} speed={30} opacity={0.18} />
+          <AmbientRing size={300} top="-60px" left="3%" delay={0} />
+          <GlowRing size={170} top="60%" right="6%" delay={3} speed={22} opacity={0.14} />
+          <AmbientRing size={170} top="60%" right="6%" delay={3} />
+          <GlowRing size={95} top="16%" right="14%" delay={6} speed={18} opacity={0.12} />
         </>
       )}
 
-      {/* Floating glass panels */}
+      {/* 3D cube */}
+      {!reduced && <Cube3D top="10%" left="8%" size={48} delay={0} />}
+
+      {/* Floating diamond */}
+      {!reduced && <FloatingDiamond />}
+
+      {/* Floating glass panels — content now visible */}
       {!reduced && (
         <>
-          <FloatingGlassPanel
-            delay={0.25}
-            x={-35}
-            y={-180}
-            rotate={-10}
-            style={{
-              top: '16%',
-              left: '4%',
-              width: 95,
-              height: 110,
-              zIndex: 1,
-            }}
-          >
-            <div style={{ padding: 18, opacity: 0 }}>
-              <div style={{ fontSize: 10, color: '#888', marginBottom: 4 }}>PROJECT</div>
-              <div style={{ fontSize: 14, color: '#111', fontWeight: 700 }}>Active</div>
+          {/* Panel 1 — Project status */}
+          <FloatingGlassPanel delay={0.3} floatY={-16} rotate={-8} style={{ top: '18%', left: '3%', width: 118, zIndex: 1 }}>
+            <div style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: 9, fontWeight: 700, color: '#aaa', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>Status</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px rgba(34,197,94,0.6)', flexShrink: 0 }} />
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#111' }}>Available</span>
+              </div>
+              <div style={{ fontSize: 10, color: '#888', lineHeight: 1.4 }}>Open for projects</div>
             </div>
           </FloatingGlassPanel>
 
-          <FloatingGlassPanel
-            delay={0.55}
-            x={35}
-            y={75}
-            rotate={7}
-            style={{
-              top: '20%',
-              right: '5%',
-              width: 105,
-              height: 75,
-              zIndex: 1,
-            }}
-          >
-            <div style={{ padding: 15, opacity: 0 }}>
-              <div style={{ fontSize: 18, color: '#22c55e', fontWeight: 800 }}>7d</div>
-              <div style={{ fontSize: 9, color: '#888' }}>Delivery</div>
+          {/* Panel 2 — Delivery */}
+          <FloatingGlassPanel delay={0.55} floatY={-12} rotate={7} style={{ top: '18%', right: '3%', width: 110, zIndex: 1 }}>
+            <div style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: 9, fontWeight: 700, color: '#aaa', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>Delivery</div>
+              <div className="display" style={{ fontSize: 24, fontWeight: 800, color: '#22c55e', lineHeight: 1 }}>7d</div>
+              <div style={{ fontSize: 10, color: '#888', marginTop: 3 }}>Guaranteed</div>
             </div>
           </FloatingGlassPanel>
 
-          <FloatingGlassPanel
-            delay={0.85}
-            x={-28}
-            y={-90}
-            rotate={-5}
-            style={{
-              bottom: '22%',
-              left: '2%',
-              width: 85,
-              height: 85,
-              zIndex: 1,
-            }}
-          >
-            <div style={{ padding: 15, opacity: 0 }}>
-              <div style={{ fontSize: 20, color: '#111', fontWeight: 800 }}>100%</div>
-              <div style={{ fontSize: 9, color: '#888' }}>Satisfaction</div>
+          {/* Panel 3 — Satisfaction */}
+          <FloatingGlassPanel delay={0.8} floatY={-10} rotate={-5} style={{ bottom: '24%', left: '2%', width: 105, zIndex: 1 }}>
+            <div style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: 9, fontWeight: 700, color: '#aaa', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>Rating</div>
+              <div className="display" style={{ fontSize: 22, fontWeight: 800, color: '#111', lineHeight: 1 }}>100%</div>
+              <div style={{ fontSize: 10, color: '#22c55e', marginTop: 3, fontWeight: 600 }}>Satisfied</div>
             </div>
           </FloatingGlassPanel>
         </>
@@ -624,40 +550,24 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
           <motion.div
             role="status"
             aria-label="Currently available for new projects"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.18, duration: 0.45 }}
+            initial={{ opacity: 0, scale: 0.88, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 0.18, duration: 0.5, ease: EASE }}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 9,
-              background: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)',
-              color: '#15803d',
-              padding: '10px 22px',
-              borderRadius: 99,
-              fontSize: 'clamp(12px, 2.5vw, 13px)',
-              fontWeight: 600,
-              border: '1px solid rgba(34,197,94,0.22)',
-              marginBottom: 'clamp(28px, 5vw, 46px)',
-              whiteSpace: 'nowrap',
-              flexWrap: 'nowrap',
-              boxShadow: `
-                0 4px 14px rgba(34,197,94,0.12),
-                inset 0 1px 0 rgba(255,255,255,0.5)
-              `,
+              display: 'inline-flex', alignItems: 'center', gap: 9,
+              background: 'linear-gradient(135deg, rgba(220,252,231,0.95) 0%, rgba(187,247,208,0.9) 100%)',
+              color: '#15803d', padding: '10px 22px', borderRadius: 99,
+              fontSize: 'clamp(12px, 2.5vw, 13px)', fontWeight: 600,
+              border: '1px solid rgba(34,197,94,0.25)',
+              marginBottom: 'clamp(28px, 5vw, 46px)', whiteSpace: 'nowrap',
+              boxShadow: '0 4px 18px rgba(34,197,94,0.15), inset 0 1px 0 rgba(255,255,255,0.6)',
+              backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
             }}
+            whileHover={{ scale: 1.04, y: -2 }}
           >
             <motion.span
-              style={{
-                width: 7,
-                height: 7,
-                borderRadius: '50%',
-                background: '#22c55e',
-                display: 'inline-block',
-                flexShrink: 0,
-                boxShadow: '0 0 6px rgba(34,197,94,0.55)',
-              }}
-              animate={{ scale: [1, 1.25, 1], opacity: [1, 0.7, 1] }}
+              style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', display: 'inline-block', flexShrink: 0, boxShadow: '0 0 8px rgba(34,197,94,0.6)' }}
+              animate={{ scale: [1, 1.3, 1], opacity: [1, 0.65, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               aria-hidden="true"
             />
@@ -665,13 +575,10 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
           </motion.div>
 
           {/* Headline */}
-          <h1
-            className="display"
-            style={{ fontWeight: 800, lineHeight: 1.0, letterSpacing: '-0.04em', color: '#111', marginBottom: 'clamp(24px, 4vw, 38px)' }}
-          >
+          <h1 className="display" style={{ fontWeight: 800, lineHeight: 1.0, letterSpacing: '-0.04em', color: '#111', marginBottom: 'clamp(24px, 4vw, 38px)' }}>
             <motion.span
               style={{ display: 'block', fontSize: 'clamp(2rem, 5.5vw, 5rem)' }}
-              initial={{ opacity: 0, y: 36 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.28, duration: 0.75, ease: EASE }}
             >
@@ -679,27 +586,26 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
             </motion.span>
             <motion.span
               style={{ display: 'block', position: 'relative', fontSize: 'clamp(2.2rem, 6.5vw, 5.8rem)', marginTop: 5 }}
-              initial={{ opacity: 0, y: 36 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.42, duration: 0.75, ease: EASE }}
             >
               grow your business
+              {/* Animated underline */}
               <motion.span
                 aria-hidden="true"
                 style={{
-                  position: 'absolute',
-                  bottom: -7,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '62%',
-                  height: 5,
-                  background: 'linear-gradient(90deg, #22c55e, #16a34a)',
+                  position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)',
+                  width: '65%', height: 6,
+                  background: 'linear-gradient(90deg, #22c55e, #4ade80, #22c55e)',
+                  backgroundSize: '200% 100%',
                   borderRadius: 99,
-                  boxShadow: '0 0 18px rgba(34,197,94,0.35)',
+                  boxShadow: '0 0 20px rgba(34,197,94,0.4), 0 2px 8px rgba(34,197,94,0.2)',
+                  animation: 'gradientShift 3s linear infinite',
                 }}
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ delay: 1.1, duration: 0.55, ease: EASE }}
+                transition={{ delay: 1.1, duration: 0.65, ease: EASE }}
               />
             </motion.span>
           </h1>
@@ -715,29 +621,17 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
             <span
               aria-label={`${txt} — and more business types`}
               style={{
-                color: '#111',
-                fontWeight: 700,
-                borderBottom: '3px solid #22c55e',
-                paddingBottom: 2,
-                display: 'inline-block',
-                minWidth: '10ch',
-                textAlign: 'left',
+                color: '#111', fontWeight: 700,
+                borderBottom: '3px solid #22c55e', paddingBottom: 2,
+                display: 'inline-block', minWidth: '10ch', textAlign: 'left',
               }}
             >
               {txt}
               {!reduced && (
-                <span
-                  aria-hidden="true"
-                  style={{
-                    display: 'inline-block',
-                    width: 2,
-                    height: '1.1em',
-                    background: '#111',
-                    verticalAlign: 'middle',
-                    marginLeft: 2,
-                    animation: 'blink 1s step-end infinite',
-                  }}
-                />
+                <span aria-hidden="true" style={{
+                  display: 'inline-block', width: 2, height: '1.1em', background: '#111',
+                  verticalAlign: 'middle', marginLeft: 2, animation: 'blink 1s step-end infinite',
+                }} />
               )}
             </span>
             {' '}— designed to bring in more customers, calls, and sales.
@@ -762,12 +656,8 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
           <motion.div
             id="hero-stats"
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: 'clamp(12px, 2vw, 16px)',
-              maxWidth: 590,
-              margin: '0 auto',
-              perspective: 900,
+              display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: 'clamp(12px, 2vw, 16px)', maxWidth: 590, margin: '0 auto', perspective: 900,
             }}
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -784,19 +674,18 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
       <div
         aria-hidden="true"
         style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          overflow: 'hidden',
-          borderTop: '1px solid rgba(34,197,94,0.08)',
-          padding: '15px 0',
-          background: 'linear-gradient(180deg, transparent, rgba(34,197,94,0.015))'
+          position: 'absolute', bottom: 0, left: 0, right: 0, overflow: 'hidden',
+          borderTop: '1px solid rgba(34,197,94,0.1)', padding: '16px 0',
+          background: 'linear-gradient(180deg, transparent, rgba(34,197,94,0.02))',
+          zIndex: 3,
         }}
       >
         <div className="marquee" style={{ display: 'flex', gap: 56, width: 'max-content' }}>
           {MARQUEE_DUPED.map((t, i) => (
-            <span key={i} style={{ fontSize: 11, fontWeight: 700, color: '#6b6b6b', whiteSpace: 'nowrap', letterSpacing: '0.12em', textTransform: 'uppercase', flexShrink: 0 }}>
+            <span key={i} style={{
+              fontSize: 11, fontWeight: 700, color: '#888',
+              whiteSpace: 'nowrap', letterSpacing: '0.12em', textTransform: 'uppercase', flexShrink: 0,
+            }}>
               {t}
             </span>
           ))}
