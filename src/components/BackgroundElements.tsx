@@ -481,7 +481,7 @@ export const ServicesBg = memo(() => {
     <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(170deg, #ffffff 0%, #fafaf8 60%, #f5f5f0 100%)',
+        background: 'linear-gradient(170deg, #f2f2ee 0%, #fafaf8 60%, #f5f5f0 100%)',
       }} />
 
       <div style={{
@@ -552,7 +552,7 @@ export const ResultsBg = memo(() => {
     <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(180deg, #ffffff 0%, #f5f8f5 50%, #ffffff 100%)',
+        background: 'linear-gradient(180deg, #f2f2ee 0%, #f5f8f5 50%, #f2f2ee 100%)',
       }} />
 
       <Grid color="rgba(34,197,94,0.05)" size={44} />
@@ -635,7 +635,7 @@ export const WhyMeBg = memo(() => {
     <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(155deg, #ffffff 0%, #fafaf8 50%, #f5f5f0 100%)',
+        background: 'linear-gradient(155deg, #f2f2ee 0%, #fafaf8 50%, #f5f5f0 100%)',
       }} />
 
       <div style={{

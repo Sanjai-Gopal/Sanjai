@@ -141,7 +141,7 @@ const TestimonialCard = memo(({ t, index }: { t: typeof TESTIMONIALS[0]; index: 
       <div aria-hidden="true" style={{
         fontSize: 56,
         lineHeight: 1,
-        color: 'rgba(34,197,94,0.08)',
+        color: `${t.color}15`,
         fontFamily: 'Georgia, serif',
         marginTop: 8,
         marginBottom: -14,

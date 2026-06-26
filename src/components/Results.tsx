@@ -141,7 +141,7 @@ const StatCard = memo(({ n, index }: { n: typeof NUMBERS[0]; index: number }) =>
 
 export default memo(function Results() {
   return (
-    <section aria-labelledby="results-heading" style={{ background: '#fff', padding: 'clamp(56px, 7vw, 80px) 0', position: 'relative', overflow: 'hidden' }}>
+    <section aria-labelledby="results-heading" style={{ background: '#f2f2ee', padding: 'clamp(56px, 7vw, 80px) 0', position: 'relative', overflow: 'hidden' }}>
       <ResultsBg />
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <h2 id="results-heading" className="sr-only">Results and social proof</h2>

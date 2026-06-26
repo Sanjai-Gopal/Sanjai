@@ -269,7 +269,7 @@ const ServiceCard = memo(({ s, index }: { s: typeof SERVICES[0]; index: number }
 
 export default memo(function Services() {
   return (
-    <section id="services" className="section" aria-labelledby="services-heading" style={{ background: '#fff', position: 'relative', overflow: 'hidden' }}>
+    <section id="services" className="section" aria-labelledby="services-heading" style={{ background: '#f2f2ee', position: 'relative', overflow: 'hidden' }}>
       <ServicesBg />
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.div

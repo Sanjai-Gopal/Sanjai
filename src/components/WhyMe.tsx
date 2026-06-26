@@ -136,7 +136,7 @@ const FeatureCard = memo(({ r, index }: { r: typeof REASONS[0]; index: number })
 
 export default memo(function WhyMe() {
   return (
-    <section id="why" className="section" aria-labelledby="whyme-heading" style={{ background: '#fff', position: 'relative', overflow: 'hidden' }}>
+    <section id="why" className="section" aria-labelledby="whyme-heading" style={{ background: '#f2f2ee', position: 'relative', overflow: 'hidden' }}>
       <WhyMeBg />
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className="whyme-grid">
