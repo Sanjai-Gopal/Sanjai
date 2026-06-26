@@ -55,7 +55,7 @@ const FloatingOrb = memo(({
       willChange: 'transform',
       pointerEvents: 'none',
     }}
-    animate={{ y: [0, -32, 12, -20, 0], x: [0, 18, -12, 8, 0], scale: [1, 1.04, 0.97, 1.02, 1] }}
+    animate={{ y: [0, -16, 8, -12, 0], x: [0, 10, -6, 4, 0], scale: [1, 1.02, 0.98, 1.01, 1] }}
     transition={{ duration: dur, delay, repeat: Infinity, ease: 'easeInOut' }}
   />
 ));
@@ -187,16 +187,16 @@ const Wave3D = memo(({
   </div>
 ));
 
-const Particles3D = memo(({ count = 20, color = 'rgba(34,197,94,0.4)' }: {
+const Particles3D = memo(({ count = 10, color = 'rgba(34,197,94,0.3)' }: {
   count?: number; color?: string;
 }) => {
   const particles = Array.from({ length: count }, (_, i) => ({
     id: i,
     x: `${(i * 47 + 13) % 97}%`,
     y: `${(i * 31 + 7) % 93}%`,
-    r: 1 + (i % 3) * 0.7,
-    dur: 6 + (i % 7) * 2,
-    delay: (i * 0.4) % 8,
+    r: 1 + (i % 3) * 0.5,
+    dur: 8 + (i % 7) * 2,
+    delay: (i * 0.5) % 10,
   }));
   return (
     <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
@@ -208,7 +208,7 @@ const Particles3D = memo(({ count = 20, color = 'rgba(34,197,94,0.4)' }: {
             width: p.r * 2, height: p.r * 2, borderRadius: '50%',
             background: color, willChange: 'transform',
           }}
-          animate={{ y: [-12, 12, -12], opacity: [0.3, 0.8, 0.3] }}
+          animate={{ y: [-8, 8, -8], opacity: [0.25, 0.6, 0.25] }}
           transition={{ duration: p.dur, delay: p.delay, repeat: Infinity, ease: 'easeInOut' }}
         />
       ))}
@@ -235,27 +235,7 @@ const GlowBeam = memo(({
   />
 ));
 
-const Spotlight = memo(({ color = 'rgba(34,197,94,0.06)', size = 800 }: {
-  color?: string; size?: number;
-}) => {
-  const { x, y } = useMouse();
-  const springX = useSpring(x, { stiffness: 80, damping: 30 });
-  const springY = useSpring(y, { stiffness: 80, damping: 30 });
-  return (
-    <motion.div
-      aria-hidden="true"
-      style={{
-        position: 'fixed', width: size, height: size,
-        borderRadius: '50%',
-        background: `radial-gradient(circle, ${color}, transparent 70%)`,
-        pointerEvents: 'none', zIndex: 0,
-        translateX: useTransform(springX, v => `calc(${v * 100}vw - ${size / 2}px)`),
-        translateY: useTransform(springY, v => `calc(${v * 100}vh - ${size / 2}px)`),
-        willChange: 'transform',
-      }}
-    />
-  );
-});
+// Spotlight removed — was visually heavy with mouse-tracking glow
 
 const ScanLine = memo(({
   top, color = 'rgba(34,197,94,0.6)', opacity = 0.06,
@@ -279,14 +259,14 @@ const ScanLine = memo(({
 export const HeroBg = memo(() => {
   const reduced = useReducedMotion();
   const { x: mx, y: my } = useMouse();
-  const ox = useTransform(mx, [0, 1], [-30, 30]);
-  const oy = useTransform(my, [0, 1], [-20, 20]);
+  const ox = useTransform(mx, [0, 1], [-20, 20]);
+  const oy = useTransform(my, [0, 1], [-12, 12]);
   const sox = useSpring(ox, { stiffness: 40, damping: 25 });
   const soy = useSpring(oy, { stiffness: 40, damping: 25 });
-  const orb1x = useTransform(mx, [0,1], [-15,15]);
-  const orb1y = useTransform(my, [0,1], [-10,10]);
-  const orb2x = useTransform(mx, [0,1], [10,-20]);
-  const orb2y = useTransform(my, [0,1], [8,-12]);
+  const orb1x = useTransform(mx, [0,1], [-10,10]);
+  const orb1y = useTransform(my, [0,1], [-6,6]);
+  const orb2x = useTransform(mx, [0,1], [6,-12]);
+  const orb2y = useTransform(my, [0,1], [5,-8]);
 
   return (
     <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
@@ -298,7 +278,7 @@ export const HeroBg = memo(() => {
       <motion.div
         style={{
           position: 'absolute', inset: '-50%', translateX: reduced ? 0 : sox, translateY: reduced ? 0 : soy,
-          background: 'radial-gradient(ellipse 80% 50% at 30% 40%, rgba(34,197,94,0.12) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 80% 50% at 30% 40%, rgba(34,197,94,0.06) 0%, transparent 60%)',
           willChange: 'transform',
         }}
       />
@@ -306,12 +286,12 @@ export const HeroBg = memo(() => {
       {!reduced && (
         <motion.div
           style={{ position: 'absolute', inset: '-20%' }}
-          animate={{ rotate: [0, 3, -2, 0], scale: [1, 1.03, 0.98, 1] }}
+          animate={{ rotate: [0, 2, -1, 0], scale: [1, 1.02, 0.99, 1] }}
           transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 60% 40% at 70% 60%, rgba(34,197,94,0.08) 0%, transparent 55%)',
+            background: 'radial-gradient(ellipse 60% 40% at 70% 60%, rgba(34,197,94,0.04) 0%, transparent 55%)',
           }} />
         </motion.div>
       )}
@@ -319,63 +299,53 @@ export const HeroBg = memo(() => {
       <div style={{
         position: 'absolute', top: '-20%', left: '50%', transform: 'translateX(-50%)',
         width: '140%', height: '60%',
-        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.08) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.04) 0%, transparent 70%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.04)" size={80} />
-      <DotMatrix color="rgba(0,0,0,0.06)" gap={48} r={1} />
-
-      {!reduced && <Spotlight color="rgba(34,197,94,0.05)" size={700} />}
+      <Grid color="rgba(34,197,94,0.03)" size={80} />
+      <DotMatrix color="rgba(0,0,0,0.04)" gap={48} r={0.8} />
 
       {!reduced && (
         <>
           <motion.div style={{ position: 'absolute', inset: 0, translateX: orb1x, translateY: orb1y }}>
-            <FloatingOrb size={600} top="-200px" left="-100px"
-              color="radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%)"
+            <FloatingOrb size={450} top="-180px" left="-80px"
+              color="radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)"
               dur={18} delay={0} />
           </motion.div>
           <motion.div style={{ position: 'absolute', inset: 0, translateX: orb2x, translateY: orb2y }}>
-            <FloatingOrb size={500} top="-100px" left="55%"
-              color="radial-gradient(circle, rgba(34,197,94,0.10) 0%, transparent 70%)"
+            <FloatingOrb size={350} top="-80px" left="55%"
+              color="radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)"
               dur={14} delay={3} />
           </motion.div>
-          <FloatingOrb size={350} top="55%" left="75%"
-            color="radial-gradient(circle, rgba(34,197,94,0.09) 0%, transparent 70%)"
+          <FloatingOrb size={260} top="55%" left="75%"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={16} delay={6} />
-          <FloatingOrb size={300} top="65%" left="-5%"
-            color="radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)"
-            dur={20} delay={2} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={180} top="8%" left="5%" color="rgba(34,197,94,0.12)" dur={25} delay={0} />
-          <Ring3D size={100} top="15%" left="88%" color="rgba(34,197,94,0.09)" dur={20} delay={4} />
-          <Ring3D size={60} top="70%" left="92%" color="rgba(34,197,94,0.08)" dur={18} delay={2} />
+          <Ring3D size={140} top="8%" left="5%" color="rgba(34,197,94,0.06)" dur={25} delay={0} />
+          <Ring3D size={80} top="15%" left="88%" color="rgba(34,197,94,0.05)" dur={20} delay={4} />
         </>
       )}
 
-      <ScanLine top="38%" color="rgba(34,197,94,0.7)" opacity={0.05} />
-      <ScanLine top="72%" color="rgba(34,197,94,0.7)" opacity={0.03} />
+      <ScanLine top="38%" color="rgba(34,197,94,0.6)" opacity={0.03} />
+      <ScanLine top="72%" color="rgba(34,197,94,0.6)" opacity={0.02} />
 
-      <GlowBeam top="30%" left="-200px" width={700} angle={-8} color="rgba(34,197,94,0.6)" opacity={0.07} />
-      <GlowBeam top="60%" left="30%" width={500} angle={12} color="rgba(34,197,94,0.6)" opacity={0.05} />
+      <GlowBeam top="30%" left="-200px" width={600} angle={-8} color="rgba(34,197,94,0.5)" opacity={0.04} />
+      <GlowBeam top="60%" left="30%" width={400} angle={12} color="rgba(34,197,94,0.5)" opacity={0.03} />
 
-      {!reduced && (
-        <Blob3D top="-20%" left="-15%" size={700} color="rgba(34,197,94,0.07)" delay={0} opacity={1} />
-      )}
-
-      <Noise opacity={0.025} />
+      <Noise opacity={0.02} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 50%, rgba(0,0,0,0.08) 100%)',
+        background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 50%, rgba(0,0,0,0.05) 100%)',
       }} />
 
       <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, height: 120,
-        background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.05))',
+        position: 'absolute', bottom: 0, left: 0, right: 0, height: 100,
+        background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.03))',
       }} />
     </div>
   );
@@ -392,53 +362,41 @@ export const AboutBg = memo(() => {
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 55% 70% at -5% 50%, rgba(34,197,94,0.10) 0%, transparent 60%)',
+        background: 'radial-gradient(ellipse 55% 70% at -5% 50%, rgba(34,197,94,0.05) 0%, transparent 60%)',
       }} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 50% 60% at 105% 50%, rgba(34,197,94,0.07) 0%, transparent 55%)',
+        background: 'radial-gradient(ellipse 50% 60% at 105% 50%, rgba(34,197,94,0.04) 0%, transparent 55%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.03)" size={70} />
-      <DotMatrix color="rgba(0,0,0,0.04)" gap={40} r={0.8} />
+      <Grid color="rgba(34,197,94,0.02)" size={70} />
+      <DotMatrix color="rgba(0,0,0,0.03)" gap={40} r={0.6} />
 
       {!reduced && (
         <>
           <motion.div
             style={{
               position: 'absolute', top: '10%', right: '-5%',
-              width: 280, height: 180, borderRadius: 24,
-              background: 'rgba(34,197,94,0.04)',
-              border: '1px solid rgba(34,197,94,0.12)',
-              backdropFilter: 'blur(8px)',
+              width: 240, height: 160, borderRadius: 20,
+              background: 'rgba(34,197,94,0.025)',
+              border: '1px solid rgba(34,197,94,0.06)',
+              backdropFilter: 'blur(6px)',
               willChange: 'transform',
             }}
-            animate={{ y: [0, -20, 8, -12, 0], rotate: [-4, -2, -5, -3, -4] }}
+            animate={{ y: [0, -12, 6, -8, 0], rotate: [-3, -1.5, -4, -2, -3] }}
             transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
           />
           <motion.div
             style={{
-              position: 'absolute', bottom: '15%', left: '-4%',
-              width: 200, height: 140, borderRadius: 20,
-              background: 'rgba(34,197,94,0.05)',
-              border: '1px solid rgba(34,197,94,0.10)',
-              backdropFilter: 'blur(6px)',
-              willChange: 'transform',
-            }}
-            animate={{ y: [0, 18, -8, 14, 0], rotate: [6, 4, 7, 5, 6] }}
-            transition={{ duration: 14, delay: 3, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            style={{
               position: 'absolute', top: '55%', right: '5%',
-              width: 120, height: 120, borderRadius: '50%',
-              background: 'rgba(34,197,94,0.04)',
-              border: '1px solid rgba(34,197,94,0.10)',
-              backdropFilter: 'blur(4px)',
+              width: 100, height: 100, borderRadius: '50%',
+              background: 'rgba(34,197,94,0.02)',
+              border: '1px solid rgba(34,197,94,0.05)',
+              backdropFilter: 'blur(3px)',
               willChange: 'transform',
             }}
-            animate={{ y: [0, -15, 10, 0], scale: [1, 1.05, 0.97, 1] }}
+            animate={{ y: [0, -10, 6, 0], scale: [1, 1.03, 0.98, 1] }}
             transition={{ duration: 11, delay: 1.5, repeat: Infinity, ease: 'easeInOut' }}
           />
         </>
@@ -446,30 +404,27 @@ export const AboutBg = memo(() => {
 
       {!reduced && (
         <>
-          <FloatingOrb size={600} top="-150px" left="55%"
-            color="radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 70%)"
+          <FloatingOrb size={450} top="-120px" left="55%"
+            color="radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)"
             dur={20} delay={0} />
-          <FloatingOrb size={400} top="50%" left="-100px"
-            color="radial-gradient(circle, rgba(34,197,94,0.09) 0%, transparent 70%)"
+          <FloatingOrb size={300} top="50%" left="-80px"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={15} delay={4} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={250} top="-60px" left="65%" color="rgba(34,197,94,0.07)" dur={30} />
-          <Ring3D size={120} top="70%" left="88%" color="rgba(34,197,94,0.08)" dur={22} delay={5} />
+          <Ring3D size={200} top="-50px" left="65%" color="rgba(34,197,94,0.04)" dur={30} />
         </>
       )}
 
-      {!reduced && <Blob3D top="20%" left="60%" size={500} color="rgba(34,197,94,0.07)" delay={5} />}
-
-      <ScanLine top="55%" color="rgba(34,197,94,0.6)" opacity={0.04} />
-      <Noise opacity={0.02} />
+      <ScanLine top="55%" color="rgba(34,197,94,0.6)" opacity={0.02} />
+      <Noise opacity={0.015} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 90% 90% at 50% 50%, transparent 55%, rgba(0,0,0,0.06) 100%)',
+        background: 'radial-gradient(ellipse 90% 90% at 50% 50%, transparent 55%, rgba(0,0,0,0.04) 100%)',
       }} />
     </div>
   );
@@ -486,7 +441,7 @@ export const ServicesBg = memo(() => {
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(34,197,94,0.08) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(34,197,94,0.04) 0%, transparent 65%)',
       }} />
 
       {!reduced && (
@@ -497,50 +452,46 @@ export const ServicesBg = memo(() => {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 60% 40% at 10% 20%, rgba(34,197,94,0.09) 0%, transparent 55%)',
+            background: 'radial-gradient(ellipse 60% 40% at 10% 20%, rgba(34,197,94,0.04) 0%, transparent 55%)',
           }} />
         </motion.div>
       )}
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 55% 45% at 95% 90%, rgba(34,197,94,0.07) 0%, transparent 55%)',
+        background: 'radial-gradient(ellipse 55% 45% at 95% 90%, rgba(34,197,94,0.035) 0%, transparent 55%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.04)" size={64} />
-      <DotMatrix color="rgba(0,0,0,0.04)" gap={32} r={0.8} />
+      <Grid color="rgba(34,197,94,0.025)" size={64} />
+      <DotMatrix color="rgba(0,0,0,0.03)" gap={32} r={0.6} />
 
       {!reduced && (
         <>
-          <FloatingOrb size={700} top="-200px" left="30%"
-            color="radial-gradient(circle, rgba(34,197,94,0.11) 0%, transparent 70%)"
+          <FloatingOrb size={500} top="-150px" left="30%"
+            color="radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)"
             dur={22} delay={0} />
-          <FloatingOrb size={400} top="60%" left="70%"
-            color="radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)"
+          <FloatingOrb size={300} top="60%" left="70%"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={16} delay={5} />
-          <FloatingOrb size={300} top="40%" left="-5%"
-            color="radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 70%)"
-            dur={18} delay={2} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={200} top="-50px" left="-50px" color="rgba(34,197,94,0.09)" dur={28} />
-          <Ring3D size={150} top="-30px" left="-30px" color="rgba(34,197,94,0.05)" dur={20} delay={4} />
+          <Ring3D size={160} top="-40px" left="-40px" color="rgba(34,197,94,0.05)" dur={28} />
         </>
       )}
 
-      <GlowBeam top="20%" left="-10%" width={800} angle={6} color="rgba(34,197,94,0.7)" opacity={0.055} />
-      <GlowBeam top="70%" left="20%" width={600} angle={-4} color="rgba(34,197,94,0.7)" opacity={0.04} />
+      <GlowBeam top="20%" left="-10%" width={600} angle={6} color="rgba(34,197,94,0.5)" opacity={0.035} />
+      <GlowBeam top="70%" left="20%" width={450} angle={-4} color="rgba(34,197,94,0.5)" opacity={0.025} />
 
-      {!reduced && <Particles3D count={18} color="rgba(34,197,94,0.35)" />}
+      {!reduced && <Particles3D count={8} color="rgba(34,197,94,0.25)" />}
 
-      <Noise opacity={0.02} />
+      <Noise opacity={0.015} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 50%, rgba(0,0,0,0.04) 100%)',
+        background: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 50%, rgba(0,0,0,0.03) 100%)',
       }} />
     </div>
   );
@@ -555,19 +506,19 @@ export const ResultsBg = memo(() => {
         background: 'linear-gradient(180deg, #f2f2ee 0%, #f5f8f5 50%, #f2f2ee 100%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.05)" size={44} />
+      <Grid color="rgba(34,197,94,0.03)" size={44} />
 
       {!reduced && (
-        <FloatingOrb size={900} top="-200px" left="50%"
-          color="radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 65%)"
+        <FloatingOrb size={650} top="-150px" left="50%"
+          color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 65%)"
           dur={22} opacity={1} />
       )}
 
-      <GlowBeam top="50%" left="0%" width={1200} angle={0} color="rgba(34,197,94,0.6)" opacity={0.04} />
+      <GlowBeam top="50%" left="0%" width={900} angle={0} color="rgba(34,197,94,0.4)" opacity={0.025} />
 
-      {!reduced && <Particles3D count={16} color="rgba(34,197,94,0.3)" />}
+      {!reduced && <Particles3D count={8} color="rgba(34,197,94,0.2)" />}
 
-      <Noise opacity={0.02} />
+      <Noise opacity={0.015} />
     </div>
   );
 });
@@ -583,47 +534,41 @@ export const ProjectsBg = memo(() => {
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(45deg, rgba(34,197,94,0.06) 0%, transparent 40%, rgba(34,197,94,0.04) 100%)',
+        background: 'linear-gradient(45deg, rgba(34,197,94,0.03) 0%, transparent 40%, rgba(34,197,94,0.02) 100%)',
       }} />
 
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: '40%',
-        background: 'radial-gradient(ellipse 90% 100% at 50% 0%, rgba(34,197,94,0.08) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 90% 100% at 50% 0%, rgba(34,197,94,0.04) 0%, transparent 65%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.03)" size={72} />
-      <DotMatrix color="rgba(0,0,0,0.05)" gap={36} r={0.8} />
+      <Grid color="rgba(34,197,94,0.02)" size={72} />
+      <DotMatrix color="rgba(0,0,0,0.035)" gap={36} r={0.6} />
 
       {!reduced && (
         <>
-          <FloatingOrb size={800} top="-300px" left="20%"
-            color="radial-gradient(circle, rgba(34,197,94,0.10) 0%, transparent 70%)"
+          <FloatingOrb size={550} top="-250px" left="20%"
+            color="radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)"
             dur={26} delay={0} />
-          <FloatingOrb size={500} top="50%" left="65%"
-            color="radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)"
+          <FloatingOrb size={350} top="50%" left="65%"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={18} delay={5} />
-          <FloatingOrb size={350} top="70%" left="-5%"
-            color="radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 70%)"
-            dur={20} delay={2} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={280} top="-60px" left="80%" color="rgba(34,197,94,0.08)" dur={32} />
-          <Ring3D size={160} top="-20px" left="83%" color="rgba(34,197,94,0.05)" dur={22} delay={6} />
+          <Ring3D size={220} top="-50px" left="80%" color="rgba(34,197,94,0.04)" dur={32} />
         </>
       )}
 
-      {!reduced && <Wave3D color="rgba(34,197,94,0.04)" bottom="0" />}
+      {!reduced && <Wave3D color="rgba(34,197,94,0.025)" bottom="0" />}
 
-      {!reduced && <Blob3D top="30%" left="-20%" size={600} color="rgba(34,197,94,0.07)" delay={12} />}
-
-      <Noise opacity={0.02} />
+      <Noise opacity={0.015} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 50%, rgba(0,0,0,0.05) 100%)',
+        background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 50%, rgba(0,0,0,0.035) 100%)',
       }} />
     </div>
   );
@@ -640,46 +585,43 @@ export const WhyMeBg = memo(() => {
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 50% 80% at -5% 50%, rgba(34,197,94,0.12) 0%, transparent 58%)',
+        background: 'radial-gradient(ellipse 50% 80% at -5% 50%, rgba(34,197,94,0.05) 0%, transparent 58%)',
       }} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 45% 60% at 108% 50%, rgba(34,197,94,0.07) 0%, transparent 55%)',
+        background: 'radial-gradient(ellipse 45% 60% at 108% 50%, rgba(34,197,94,0.035) 0%, transparent 55%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.03)" size={65} />
-      <DotMatrix color="rgba(0,0,0,0.04)" gap={44} r={1} />
+      <Grid color="rgba(34,197,94,0.02)" size={65} />
+      <DotMatrix color="rgba(0,0,0,0.03)" gap={44} r={0.7} />
 
       {!reduced && (
         <>
-          <FloatingOrb size={700} top="10%" left="-200px"
-            color="radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 70%)"
+          <FloatingOrb size={500} top="10%" left="-150px"
+            color="radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)"
             dur={20} delay={0} />
-          <FloatingOrb size={400} top="50%" left="60%"
-            color="radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)"
+          <FloatingOrb size={300} top="50%" left="60%"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={15} delay={4} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={220} top="-40px" left="48%" color="rgba(34,197,94,0.07)" dur={28} />
-          <Ring3D size={90} top="75%" left="88%" color="rgba(34,197,94,0.08)" dur={18} delay={3} />
+          <Ring3D size={180} top="-35px" left="48%" color="rgba(34,197,94,0.04)" dur={28} />
         </>
       )}
 
-      {!reduced && <Particles3D count={14} color="rgba(34,197,94,0.3)" />}
+      {!reduced && <Particles3D count={6} color="rgba(34,197,94,0.2)" />}
 
-      <ScanLine top="45%" color="rgba(34,197,94,0.7)" opacity={0.04} />
+      <ScanLine top="45%" color="rgba(34,197,94,0.6)" opacity={0.025} />
 
-      {!reduced && <Blob3D top="15%" left="55%" size={550} color="rgba(34,197,94,0.07)" delay={7} />}
-
-      <Noise opacity={0.02} />
+      <Noise opacity={0.015} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 48%, rgba(0,0,0,0.04) 100%)',
+        background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 48%, rgba(0,0,0,0.03) 100%)',
       }} />
     </div>
   );
@@ -696,40 +638,40 @@ export const TestimonialsBg = memo(() => {
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 75% 60% at 50% 50%, rgba(34,197,94,0.08) 0%, transparent 60%)',
+        background: 'radial-gradient(ellipse 75% 60% at 50% 50%, rgba(34,197,94,0.04) 0%, transparent 60%)',
       }} />
 
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: '45%',
-        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.07) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.035) 0%, transparent 65%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.03)" size={60} />
-      <DotMatrix color="rgba(0,0,0,0.04)" gap={40} r={0.8} />
+      <Grid color="rgba(34,197,94,0.02)" size={60} />
+      <DotMatrix color="rgba(0,0,0,0.03)" gap={40} r={0.6} />
 
       {!reduced && (
         <>
           <motion.div
             style={{
               position: 'absolute', top: '5%', left: '2%',
-              width: 100, height: 100, borderRadius: '50%',
-              border: '1px solid rgba(34,197,94,0.12)',
-              background: 'rgba(34,197,94,0.03)',
+              width: 80, height: 80, borderRadius: '50%',
+              border: '1px solid rgba(34,197,94,0.06)',
+              background: 'rgba(34,197,94,0.02)',
               willChange: 'transform',
             }}
-            animate={{ y: [0, -18, 10, 0], rotate: [0, 8, -4, 0] }}
+            animate={{ y: [0, -12, 6, 0], rotate: [0, 5, -3, 0] }}
             transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
           />
           <motion.div
             style={{
-              position: 'absolute', bottom: '10%', right: '3%',
-              width: 80, height: 80, borderRadius: 16,
-              border: '1px solid rgba(34,197,94,0.10)',
-              background: 'rgba(34,197,94,0.02)',
+              position: 'absolute', bottom: '12%', right: '4%',
+              width: 60, height: 60, borderRadius: 12,
+              border: '1px solid rgba(34,197,94,0.05)',
+              background: 'rgba(34,197,94,0.015)',
               transform: 'rotate(30deg)',
               willChange: 'transform',
             }}
-            animate={{ y: [0, 14, -10, 0], rotate: [30, 38, 24, 30] }}
+            animate={{ y: [0, 10, -6, 0], rotate: [30, 36, 24, 30] }}
             transition={{ duration: 14, delay: 3, repeat: Infinity, ease: 'easeInOut' }}
           />
         </>
@@ -737,29 +679,28 @@ export const TestimonialsBg = memo(() => {
 
       {!reduced && (
         <>
-          <FloatingOrb size={600} top="-160px" left="30%"
-            color="radial-gradient(circle, rgba(34,197,94,0.10) 0%, transparent 70%)"
+          <FloatingOrb size={450} top="-120px" left="30%"
+            color="radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)"
             dur={22} delay={0} />
-          <FloatingOrb size={400} top="55%" left="70%"
-            color="radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)"
+          <FloatingOrb size={300} top="55%" left="70%"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={16} delay={6} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={260} top="-60px" left="15%" color="rgba(34,197,94,0.07)" dur={30} />
-          <Ring3D size={80} top="80%" left="5%" color="rgba(34,197,94,0.08)" dur={18} delay={4} />
+          <Ring3D size={200} top="-50px" left="15%" color="rgba(34,197,94,0.04)" dur={30} />
         </>
       )}
 
-      {!reduced && <Particles3D count={16} color="rgba(34,197,94,0.28)" />}
+      {!reduced && <Particles3D count={8} color="rgba(34,197,94,0.2)" />}
 
-      <Noise opacity={0.02} />
+      <Noise opacity={0.015} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 90% 85% at 50% 50%, transparent 52%, rgba(0,0,0,0.04) 100%)',
+        background: 'radial-gradient(ellipse 90% 85% at 50% 50%, transparent 52%, rgba(0,0,0,0.03) 100%)',
       }} />
     </div>
   );
@@ -768,12 +709,12 @@ export const TestimonialsBg = memo(() => {
 export const CTABg = memo(() => {
   const reduced = useReducedMotion();
   const { x: mx, y: my } = useMouse();
-  const ox = useTransform(mx, [0, 1], [-20, 20]);
-  const oy = useTransform(my, [0, 1], [-15, 15]);
+  const ox = useTransform(mx, [0, 1], [-12, 12]);
+  const oy = useTransform(my, [0, 1], [-8, 8]);
   const sox = useSpring(ox, { stiffness: 40, damping: 25 });
   const soy = useSpring(oy, { stiffness: 40, damping: 25 });
-  const ctaOrbX = useTransform(mx, [0,1], [-25, 25]);
-  const ctaOrbY = useTransform(my, [0,1], [-15, 15]);
+  const ctaOrbX = useTransform(mx, [0,1], [-15, 15]);
+  const ctaOrbY = useTransform(my, [0,1], [-8, 8]);
 
   return (
     <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
@@ -792,7 +733,7 @@ export const CTABg = memo(() => {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(34,197,94,0.12) 0%, transparent 60%)',
+            background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(34,197,94,0.06) 0%, transparent 60%)',
           }} />
         </motion.div>
       )}
@@ -800,10 +741,10 @@ export const CTABg = memo(() => {
       <div style={{
         position: 'absolute', top: '-10%', left: '50%', transform: 'translateX(-50%)',
         width: '120%', height: '70%',
-        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.10) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.05) 0%, transparent 65%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.04)" size={60} />
+      <Grid color="rgba(34,197,94,0.025)" size={60} />
 
       {!reduced && (
         <motion.div
@@ -813,40 +754,37 @@ export const CTABg = memo(() => {
             translateY: ctaOrbY,
           }}
         >
-          <FloatingOrb size={700} top="-250px" left="50%"
-            color="radial-gradient(circle, rgba(34,197,94,0.14) 0%, transparent 68%)"
+          <FloatingOrb size={500} top="-180px" left="50%"
+            color="radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 68%)"
             dur={20} delay={0} />
         </motion.div>
       )}
 
       {!reduced && (
         <>
-          <FloatingOrb size={400} top="40%" left="-80px"
-            color="radial-gradient(circle, rgba(34,197,94,0.09) 0%, transparent 70%)"
+          <FloatingOrb size={300} top="40%" left="-60px"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={15} delay={3} />
-          <FloatingOrb size={400} top="40%" left="75%"
-            color="radial-gradient(circle, rgba(34,197,94,0.09) 0%, transparent 70%)"
+          <FloatingOrb size={300} top="40%" left="75%"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={17} delay={6} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={300} top="-100px" left="50%" color="rgba(34,197,94,0.09)" dur={40} />
-          <Ring3D size={450} top="-175px" left="50%" color="rgba(34,197,94,0.04)" dur={55} delay={5} />
-          <Ring3D size={160} top="65%" left="88%" color="rgba(34,197,94,0.08)" dur={22} delay={3} />
+          <Ring3D size={240} top="-80px" left="50%" color="rgba(34,197,94,0.05)" dur={40} />
+          <Ring3D size={350} top="-140px" left="50%" color="rgba(34,197,94,0.025)" dur={55} delay={5} />
         </>
       )}
 
-      {!reduced && <Particles3D count={24} color="rgba(34,197,94,0.4)" />}
+      {!reduced && <Particles3D count={10} color="rgba(34,197,94,0.25)" />}
 
-      {!reduced && <Blob3D top="-20%" left="60%" size={600} color="rgba(34,197,94,0.07)" delay={0} />}
-
-      <Noise opacity={0.025} />
+      <Noise opacity={0.015} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 75% 65% at 50% 50%, transparent 40%, rgba(0,0,0,0.06) 100%)',
+        background: 'radial-gradient(ellipse 75% 65% at 50% 50%, transparent 40%, rgba(0,0,0,0.04) 100%)',
       }} />
     </div>
   );
@@ -863,54 +801,48 @@ export const ContactBg = memo(() => {
 
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: '50%',
-        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.08) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.04) 0%, transparent 65%)',
       }} />
 
       <div style={{
         position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
-        background: 'radial-gradient(ellipse 60% 80% at 50% 100%, rgba(34,197,94,0.07) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 60% 80% at 50% 100%, rgba(34,197,94,0.035) 0%, transparent 65%)',
       }} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 40% 50% at 0% 50%, rgba(34,197,94,0.06) 0%, transparent 55%)',
+        background: 'radial-gradient(ellipse 40% 50% at 0% 50%, rgba(34,197,94,0.03) 0%, transparent 55%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.03)" size={62} />
-      <DotMatrix color="rgba(0,0,0,0.04)" gap={38} r={0.9} />
+      <Grid color="rgba(34,197,94,0.02)" size={62} />
+      <DotMatrix color="rgba(0,0,0,0.03)" gap={38} r={0.6} />
 
       {!reduced && (
         <>
-          <FloatingOrb size={700} top="-200px" left="30%"
-            color="radial-gradient(circle, rgba(34,197,94,0.10) 0%, transparent 70%)"
+          <FloatingOrb size={500} top="-150px" left="30%"
+            color="radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)"
             dur={22} delay={0} />
-          <FloatingOrb size={500} top="50%" left="65%"
-            color="radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)"
+          <FloatingOrb size={350} top="50%" left="65%"
+            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
             dur={18} delay={5} />
-          <FloatingOrb size={300} top="65%" left="-5%"
-            color="radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 70%)"
-            dur={16} delay={2} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={250} top="-70px" left="70%" color="rgba(34,197,94,0.08)" dur={32} />
-          <Ring3D size={140} top="-40px" left="73%" color="rgba(34,197,94,0.05)" dur={22} delay={4} />
+          <Ring3D size={200} top="-55px" left="70%" color="rgba(34,197,94,0.04)" dur={32} />
         </>
       )}
 
-      {!reduced && <Particles3D count={20} color="rgba(34,197,94,0.35)" />}
+      {!reduced && <Particles3D count={10} color="rgba(34,197,94,0.25)" />}
 
-      {!reduced && <Wave3D color="rgba(34,197,94,0.04)" bottom="auto" />}
+      {!reduced && <Wave3D color="rgba(34,197,94,0.025)" bottom="auto" />}
 
-      {!reduced && <Blob3D top="40%" left="65%" size={500} color="rgba(34,197,94,0.07)" delay={9} />}
-
-      <Noise opacity={0.02} />
+      <Noise opacity={0.015} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 50%, rgba(0,0,0,0.04) 100%)',
+        background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 50%, rgba(0,0,0,0.03) 100%)',
       }} />
     </div>
   );

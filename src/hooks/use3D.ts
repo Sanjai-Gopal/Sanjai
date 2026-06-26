@@ -1,6 +1,39 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMotionValue, useSpring, useTransform } from 'motion/react';
 
+/* ═══════════════════════════════════════════════════════
+   UNIFIED ANIMATION CONFIGURATION
+   All spring and timing values standardized here
+════════════════════════════════════════════════════════ */
+
+// Standard spring configurations
+export const SPRING_CONFIGS = {
+  // For 3D card tilts - responsive but smooth
+  tilt: { stiffness: 200, damping: 22 },
+  // For magnetic buttons - snappy response
+  magnetic: { stiffness: 150, damping: 18 },
+  // For floating elements - gentle oscillation
+  float: { stiffness: 50, damping: 20 },
+  // For hover effects - quick but smooth
+  hover: { stiffness: 300, damping: 25 },
+  // For parallax - smooth following
+  parallax: { stiffness: 80, damping: 25 },
+} as const;
+
+// Standard tilt intensities
+export const TILT_STRENGTH = {
+  subtle: 5,
+  standard: 7,
+  strong: 10,
+} as const;
+
+// Standard perspective values
+export const PERSPECTIVE = {
+  close: 700,
+  standard: 900,
+  far: 1200,
+} as const;
+
 /* ═══════════════════════════════════════════════════
    Mouse Position Hook - Tracks mouse for parallax/tilt
 ═══════════════════════════════════════════════════ */
@@ -26,13 +59,13 @@ export function useMousePosition() {
    3D Tilt Hook - Premium card rotation effect
 ═══════════════════════════════════════════════════ */
 
-export function use3DTilt(strength: number = 15, perspective: number = 1000) {
+export function use3DTilt(strength: number = TILT_STRENGTH.standard, perspective: number = PERSPECTIVE.standard) {
   const ref = useRef<HTMLElement>(null);
   const rotateX = useMotionValue(0);
   const rotateY = useMotionValue(0);
 
-  const springRotateX = useSpring(rotateX, { stiffness: 300, damping: 30 });
-  const springRotateY = useSpring(rotateY, { stiffness: 300, damping: 30 });
+  const springRotateX = useSpring(rotateX, SPRING_CONFIGS.tilt);
+  const springRotateY = useSpring(rotateY, SPRING_CONFIGS.tilt);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!ref.current) return;
@@ -65,13 +98,13 @@ export function use3DTilt(strength: number = 15, perspective: number = 1000) {
    Magnetic Button Hook - Premium magnetic hover
 ═══════════════════════════════════════════════════ */
 
-export function useMagnetic(strength: number = 0.3) {
+export function useMagnetic(strength: number = 0.25) {
   const ref = useRef<HTMLElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const springX = useSpring(x, { stiffness: 150, damping: 15 });
-  const springY = useSpring(y, { stiffness: 150, damping: 15 });
+  const springX = useSpring(x, SPRING_CONFIGS.magnetic);
+  const springY = useSpring(y, SPRING_CONFIGS.magnetic);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!ref.current) return;
@@ -201,5 +234,5 @@ export function useGlitchChar(text: string, interval: number = 50) {
 export function useParallax(strength: number = 50) {
   const { mouseY } = useMousePosition();
   const y = useTransform(mouseY, [0, 1], [-strength, strength]);
-  return useSpring(y, { stiffness: 50, damping: 20 });
+  return useSpring(y, SPRING_CONFIGS.parallax);
 }
