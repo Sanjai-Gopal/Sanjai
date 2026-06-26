@@ -23,13 +23,13 @@ const WaSvg = () => (
 
 export default memo(function Navbar({ active, onNavigate }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen]         = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     let rafId: number;
     const fn = () => {
       cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => setScrolled(window.scrollY > 50));
+      rafId = requestAnimationFrame(() => setScrolled(window.scrollY > 40));
     };
     window.addEventListener('scroll', fn, { passive: true });
     fn();
@@ -64,83 +64,193 @@ export default memo(function Navbar({ active, onNavigate }: NavbarProps) {
       <header
         role="banner"
         style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-          background: scrolled ? 'rgba(242,242,238,0.96)' : '#f2f2ee',
-          backdropFilter: scrolled ? 'blur(24px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(0,0,0,0.07)' : '1px solid transparent',
-          transition: 'background 0.35s ease, border-color 0.35s ease',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          background: scrolled
+            ? 'linear-gradient(135deg, rgba(242,242,238,0.94) 0%, rgba(250,250,248,0.92) 100%)'
+            : 'rgba(242,242,238,0.5)',
+          backdropFilter: scrolled ? 'blur(24px)' : 'blur(8px)',
+          WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'blur(8px)',
+          borderBottom: scrolled
+            ? '1px solid rgba(34,197,94,0.08)'
+            : '1px solid transparent',
+          boxShadow: scrolled
+            ? '0 4px 24px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02)'
+            : 'none',
+          transition: 'background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease',
         }}
       >
         <div style={{
-          width: '100%', maxWidth: 1200, margin: '0 auto',
+          width: '100%',
+          maxWidth: 1200,
+          margin: '0 auto',
           padding: '0 clamp(16px, 3vw, 48px)',
-          height: 64, display: 'flex', alignItems: 'center', gap: 8,
+          height: 68,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
           boxSizing: 'border-box',
         }}>
-          <button
+          {/* Logo */}
+          <motion.button
             onClick={() => go('home')}
-            style={{ fontSize: 22, fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 800, color: '#111', letterSpacing: '-0.04em', lineHeight: 1, padding: 0, background: 'transparent', border: 'none', cursor: 'pointer', flexShrink: 0 }}
+            style={{
+              fontSize: 23,
+              fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
+              fontWeight: 800,
+              color: '#111',
+              letterSpacing: '-0.04em',
+              lineHeight: 1,
+              padding: 0,
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              flexShrink: 0,
+              position: 'relative',
+            }}
             aria-label="Go to home"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             sanjai
-          </button>
+            <motion.span
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                bottom: -4,
+                left: 0,
+                width: '100%',
+                height: 2,
+                background: 'linear-gradient(90deg, #22c55e, transparent)',
+                borderRadius: 2,
+              }}
+              initial={{ scaleX: 0 }}
+              whileHover={{ scaleX: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.button>
 
+          {/* Desktop nav */}
           <nav
             aria-label="Primary navigation"
             className="navbar-desktop"
-            style={{ display: 'none', alignItems: 'center', gap: 2, borderRadius: 99, padding: '5px', background: '#e8e8e3', flexShrink: 0, margin: '0 auto' }}
+            style={{
+              display: 'none',
+              alignItems: 'center',
+              gap: 3,
+              borderRadius: 99,
+              padding: '6px',
+              background: scrolled
+                ? 'rgba(255,255,255,0.7)'
+                : 'rgba(255,255,255,0.5)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              flexShrink: 0,
+              margin: '0 auto',
+              boxShadow: scrolled
+                ? '0 2px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.5)'
+                : '0 1px 4px rgba(0,0,0,0.02)',
+              border: '1px solid rgba(255,255,255,0.4)',
+            }}
           >
             {LINKS.map(l => (
-              <button
+              <motion.button
                 key={l.id}
                 onClick={() => go(l.id)}
                 style={{
-                  background: active === l.id ? '#111' : 'transparent',
-                  color: active === l.id ? '#fff' : '#666',
-                  border: 'none', cursor: 'pointer', borderRadius: 99,
-                  padding: '7px 14px', fontSize: 13, fontWeight: 600,
-                  fontFamily: 'inherit', whiteSpace: 'nowrap',
-                  transition: 'background 0.18s ease, color 0.18s ease', lineHeight: 1,
+                  background: active === l.id
+                    ? 'linear-gradient(135deg, #111 0%, #1a1a1a 100%)'
+                    : 'transparent',
+                  color: active === l.id ? '#fff' : '#555',
+                  border: 'none',
+                  cursor: 'pointer',
+                  borderRadius: 99,
+                  padding: '8px 18px',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                  whiteSpace: 'nowrap',
+                  lineHeight: 1,
+                  transition: 'background 0.2s ease, color 0.2s ease',
+                  boxShadow: active === l.id
+                    ? '0 2px 8px rgba(0,0,0,0.15)'
+                    : 'none',
                 }}
+                whileHover={{ scale: active === l.id ? 1 : 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 aria-current={active === l.id ? 'page' : undefined}
-                onMouseEnter={e => { if (active !== l.id) (e.currentTarget as HTMLElement).style.color = '#111'; }}
-                onMouseLeave={e => { if (active !== l.id) (e.currentTarget as HTMLElement).style.color = '#666'; }}
               >
                 {l.label}
-              </button>
+              </motion.button>
             ))}
           </nav>
 
-          <a
+          {/* CTA button */}
+          <motion.a
             href="https://wa.me/919363265552?text=Hi Sanjai, I need a website!"
             target="_blank"
             rel="noopener noreferrer"
-            className="navbar-cta btn btn-dark"
-            style={{ display: 'none', padding: '10px 20px', fontSize: 13, flexShrink: 0, marginLeft: 'auto' }}
+            className="navbar-cta"
+            style={{
+              display: 'none',
+              padding: '11px 22px',
+              fontSize: 13,
+              flexShrink: 0,
+              marginLeft: 'auto',
+              borderRadius: 99,
+              background: 'linear-gradient(135deg, #111 0%, #222 100%)',
+              color: '#fff',
+              fontWeight: 600,
+              fontFamily: 'inherit',
+              textDecoration: 'none',
+              border: '1px solid rgba(255,255,255,0.1)',
+              boxShadow: '0 3px 12px rgba(0,0,0,0.15)',
+            }}
+            whileHover={{ scale: 1.03, y: -1 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.2 }}
           >
             Book a Call
-          </a>
+          </motion.a>
 
-          <button
+          {/* Mobile menu button */}
+          <motion.button
             onClick={() => setOpen(v => !v)}
             className="navbar-burger"
             style={{
-              width: 40, height: 40,
-              background: open ? '#e8e8e3' : 'transparent',
-              color: '#111', border: 'none', borderRadius: 99,
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0, marginLeft: 'auto', transition: 'background 0.2s ease',
+              width: 44,
+              height: 44,
+              background: open
+                ? 'rgba(255,255,255,0.8)'
+                : 'rgba(255,255,255,0.5)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              color: '#111',
+              border: '1px solid rgba(255,255,255,0.4)',
+              borderRadius: 99,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              marginLeft: 'auto',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
             }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             aria-controls="mobile-nav"
           >
             {open ? <X size={20} strokeWidth={2.5} /> : <Menu size={20} strokeWidth={2.5} />}
-          </button>
+          </motion.button>
         </div>
       </header>
 
+      {/* Mobile menu */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -151,32 +261,76 @@ export default memo(function Navbar({ active, onNavigate }: NavbarProps) {
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'tween', duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            style={{ position: 'fixed', inset: 0, zIndex: 49, background: '#f2f2ee', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}
+            transition={{ type: 'tween', duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 49,
+              background: 'linear-gradient(135deg, #f2f2ee 0%, #fafaf8 50%, #f5f5f0 100%)',
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
           >
+            {/* Top bar */}
             <div style={{
-              maxWidth: 1200, margin: '0 auto',
+              maxWidth: 1200,
+              margin: '0 auto',
               padding: '0 clamp(16px, 3vw, 40px)',
-              height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              borderBottom: '1px solid rgba(0,0,0,0.06)', flexShrink: 0, width: '100%',
+              height: 68,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderBottom: '1px solid rgba(34,197,94,0.08)',
+              flexShrink: 0,
+              width: '100%',
               boxSizing: 'border-box',
+              background: 'rgba(255,255,255,0.7)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
             }}>
-              <span style={{ fontSize: 22, fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 800, color: '#111', letterSpacing: '-0.04em' }}>sanjai</span>
-              <button
+              <span style={{
+                fontSize: 23,
+                fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
+                fontWeight: 800,
+                color: '#111',
+                letterSpacing: '-0.04em',
+              }}>sanjai</span>
+              <motion.button
                 onClick={() => setOpen(false)}
-                style={{ width: 40, height: 40, background: '#e8e8e3', border: 'none', borderRadius: 99, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#111' }}
+                style={{
+                  width: 44,
+                  height: 44,
+                  background: 'rgba(255,255,255,0.9)',
+                  border: '1px solid rgba(255,255,255,0.5)',
+                  borderRadius: 99,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#111',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
                 aria-label="Close menu"
               >
                 <X size={20} strokeWidth={2.5} />
-              </button>
+              </motion.button>
             </div>
 
+            {/* Nav items */}
             <nav
               style={{
-                maxWidth: 1200, margin: '0 auto',
-                padding: '32px clamp(16px, 3vw, 40px)',
-                display: 'flex', flexDirection: 'column', flex: 1,
-                justifyContent: 'center', gap: 4, width: '100%',
+                maxWidth: 1200,
+                margin: '0 auto',
+                padding: '36px clamp(16px, 3vw, 40px)',
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                justifyContent: 'center',
+                gap: 6,
+                width: '100%',
                 boxSizing: 'border-box',
               }}
               aria-label="Mobile navigation"
@@ -186,53 +340,85 @@ export default memo(function Navbar({ active, onNavigate }: NavbarProps) {
                   key={l.id}
                   onClick={() => go(l.id)}
                   style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    width: '100%', textAlign: 'left', border: 'none', cursor: 'pointer',
-                    background: 'transparent', borderRadius: 16, padding: '18px 20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    textAlign: 'left',
+                    border: 'none',
+                    cursor: 'pointer',
+                    background: 'transparent',
+                    borderRadius: 18,
+                    padding: '20px 22px',
                     fontFamily: 'inherit',
                   }}
-                  initial={{ opacity: 0, x: 24 }}
+                  initial={{ opacity: 0, x: 28 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 + 0.05, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ background: 'rgba(34,197,94,0.06)' }}
                   aria-current={active === l.id ? 'page' : undefined}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(0,0,0,0.04)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                 >
                   <span style={{
-                    fontSize: 'clamp(24px, 7vw, 36px)',
+                    fontSize: 'clamp(26px, 7vw, 40px)',
                     fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
                     fontWeight: 800,
                     color: active === l.id ? '#22c55e' : '#111',
-                    letterSpacing: '-0.03em', lineHeight: 1.1,
+                    letterSpacing: '-0.03em',
+                    lineHeight: 1.1,
                   }}>
                     {l.label}
                   </span>
-                  <ArrowRight size={20} style={{ color: active === l.id ? '#22c55e' : '#ccc', flexShrink: 0 }} aria-hidden="true" />
+                  <ArrowRight
+                    size={20}
+                    style={{ color: active === l.id ? '#22c55e' : '#ccc', flexShrink: 0 }}
+                    aria-hidden="true"
+                  />
                 </motion.button>
               ))}
             </nav>
 
+            {/* Bottom CTA */}
             <motion.div
               style={{
-                maxWidth: 1200, margin: '0 auto',
-                padding: '0 clamp(16px, 3vw, 40px) 40px',
-                flexShrink: 0, width: '100%',
+                maxWidth: 1200,
+                margin: '0 auto',
+                padding: '0 clamp(16px, 3vw, 40px) 44px',
+                flexShrink: 0,
+                width: '100%',
                 boxSizing: 'border-box',
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.35 }}
             >
-              <a
+              <motion.a
                 href="https://wa.me/919363265552"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-dark"
-                style={{ fontSize: 16, borderRadius: 16, width: '100%', justifyContent: 'center', display: 'flex' }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 10,
+                  width: '100%',
+                  padding: '18px',
+                  borderRadius: 18,
+                  background: 'linear-gradient(135deg, #111 0%, #222 100%)',
+                  color: '#fff',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                  textDecoration: 'none',
+                  boxShadow: '0 5px 20px rgba(0,0,0,0.18)',
+                }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <WaSvg /> Book a Free Call
-              </a>
-              <p style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: '#aaa' }}>Replies within 2 hours · Salem, TN</p>
+              </motion.a>
+              <p style={{ textAlign: 'center', marginTop: 14, fontSize: 12, color: '#888' }}>
+                Replies within 2 hours · Salem, TN
+              </p>
             </motion.div>
           </motion.div>
         )}

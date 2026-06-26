@@ -1,10 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useId, memo } from 'react';
-import { motion } from 'motion/react';
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { ContactBg } from './BackgroundElements';
-import {
-  MessageCircle, Mail, MapPin, Linkedin, Instagram,
-  Send, CheckCircle2, Bot, AlertCircle,
-} from 'lucide-react';
+import { MessageCircle, Mail, MapPin, Linkedin, Instagram, Send, CircleCheck as CheckCircle2, Bot, CircleAlert as AlertCircle } from 'lucide-react';
 
 /* ─── Types ─────────────────────────────── */
 interface FormFields {
@@ -38,14 +35,15 @@ const SUGGESTIONS = [
 
 /* ─── Shared input styles ────────────────── */
 const inputBase: React.CSSProperties = {
-  width: '100%', padding: '12px 14px', borderRadius: 12,
-  fontSize: 14, border: '1.5px solid #e5e5e0',
-  background: '#fafafa', color: '#111', outline: 'none',
-  transition: 'border-color 0.2s, background 0.2s', fontFamily: 'inherit',
-  boxSizing: 'border-box',
+  width: '100%', padding: '12px 14px', borderRadius: 14,
+  fontSize: 14, border: '1.5px solid rgba(0,0,0,0.08)',
+  background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)',
+  color: '#111', outline: 'none',
+  transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s', fontFamily: 'inherit',
+  boxSizing: 'border-box', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
 };
 const labelStyle: React.CSSProperties = {
-  display: 'block', fontSize: 10, fontWeight: 700, color: '#999',
+  display: 'block', fontSize: 10, fontWeight: 700, color: '#888',
   marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em',
 };
 
@@ -137,18 +135,29 @@ function AIAssistant() {
       <div style={{
         display: 'flex', alignItems: 'center', gap: 12,
         marginBottom: 16, paddingBottom: 16,
-        borderBottom: '1px solid #f0f0ea',
+        borderBottom: '1px solid rgba(0,0,0,0.06)',
       }}>
-        <div style={{
-          width: 40, height: 40, borderRadius: 12,
-          background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-        }} aria-hidden="true">
+        <motion.div
+          style={{
+            width: 44, height: 44, borderRadius: 13,
+            background: 'linear-gradient(135deg, #111 0%, #1a1a1a 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          }}
+          whileHover={{ scale: 1.05, rotate: 2 }}
+          aria-hidden="true"
+        >
           <Bot size={18} color="#fff" aria-hidden="true" />
-        </div>
+        </motion.div>
         <div>
           <div style={{ fontWeight: 700, fontSize: 14, color: '#111' }} id="ai-assistant-title">Sanjai's Assistant</div>
           <div style={{ fontSize: 11, color: '#22c55e', display: 'flex', alignItems: 'center', gap: 5, marginTop: 2, fontWeight: 600 }}>
-            <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'pulseDot 2s ease-in-out infinite' }} aria-hidden="true" />
+            <motion.span
+              style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block', boxShadow: '0 0 6px rgba(34,197,94,0.5)' }}
+              animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              aria-hidden="true"
+            />
             <span>Online · Ask me anything</span>
           </div>
         </div>
@@ -222,16 +231,31 @@ function AIAssistant() {
           disabled={loading}
           aria-label="Type your question"
           maxLength={500}
-          style={{ flex: 1, padding: '10px 14px', borderRadius: 12, border: '1.5px solid #e5e5e0', fontSize: 13, outline: 'none', fontFamily: 'inherit', color: '#111', background: '#fff', transition: 'border-color 0.2s', minWidth: 0 }}
-          onFocus={e => { e.currentTarget.style.borderColor = '#111'; }}
-          onBlur={e => { e.currentTarget.style.borderColor = '#e5e5e0'; }}
+          style={{
+            flex: 1, padding: '12px 14px', borderRadius: 14,
+            border: '1.5px solid rgba(0,0,0,0.08)',
+            fontSize: 13, outline: 'none', fontFamily: 'inherit', color: '#111',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)',
+            transition: 'border-color 0.2s, box-shadow 0.2s, background 0.2s', minWidth: 0,
+          }}
+          onFocus={e => { e.currentTarget.style.borderColor = '#22c55e'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.1)'; e.currentTarget.style.background = '#fff'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)'; }}
         />
-        <button
+        <motion.button
           type="button" onClick={() => send()} disabled={loading || !input.trim()} aria-label="Send message"
-          style={{ width: 42, height: 42, borderRadius: 12, background: input.trim() ? '#111' : '#ebebeb', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: input.trim() ? 'pointer' : 'default', flexShrink: 0, transition: 'background 0.2s' }}
+          style={{
+            width: 44, height: 44, borderRadius: 14,
+            background: input.trim() ? 'linear-gradient(135deg, #111 0%, #222 100%)' : 'linear-gradient(135deg, #ebebeb 0%, #e0e0e0 100%)',
+            border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: input.trim() ? 'pointer' : 'default', flexShrink: 0,
+            boxShadow: input.trim() ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
+          }}
+          whileHover={input.trim() ? { scale: 1.05 } : {}}
+          whileTap={input.trim() ? { scale: 0.95 } : {}}
+          transition={{ duration: 0.2 }}
         >
-          <Send size={14} color={input.trim() ? '#fff' : '#bbb'} aria-hidden="true" />
-        </button>
+          <Send size={15} color={input.trim() ? '#fff' : '#bbb'} aria-hidden="true" />
+        </motion.button>
       </div>
     </div>
   );
@@ -251,8 +275,9 @@ function ContactForm() {
   }, [errors]);
 
   const focusStyle = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.currentTarget.style.borderColor = '#111';
+    e.currentTarget.style.borderColor = '#22c55e';
     e.currentTarget.style.background = '#fff';
+    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.12), 0 2px 8px rgba(0,0,0,0.04)';
   };
   const blurStyle = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const fe = validate(fields);
@@ -260,10 +285,12 @@ function ContactForm() {
     if (fe[fieldName]) {
       setErrors(p => ({ ...p, [fieldName]: fe[fieldName] }));
       e.currentTarget.style.borderColor = '#ef4444';
+      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.1)';
     } else {
-      e.currentTarget.style.borderColor = '#e5e5e0';
+      e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)';
+      e.currentTarget.style.boxShadow = 'none';
     }
-    e.currentTarget.style.background = '#fafafa';
+    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)';
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -466,9 +493,12 @@ const SOCIAL_LINKS = [
   { Icon: Instagram, href: 'https://instagram.com/hey.sanjai_', label: 'Instagram profile' },
 ] as const;
 
-const CONTACT_CARDS = [
-  { Icon: MessageCircle, title: 'WhatsApp', sub: 'Fastest response', subColor: '#22c55e', iconBg: '#dcfce7', iconColor: '#16a34a', border: '#bbf7d0', href: `https://wa.me/${WA_NUMBER}?text=Hi Sanjai, I need a website!` },
-  { Icon: Mail,          title: 'Email',    sub: EMAIL,              subColor: '#aaa',    iconBg: '#f5f5f0', iconColor: '#555',    border: '#e8e8e3', href: `mailto:${EMAIL}` },
+const CONTACT_CARDS: ReadonlyArray<{
+  Icon: React.ComponentType<{ size?: number; color?: string; 'aria-hidden'?: boolean }>;
+  title: string; sub: string; subColor: string; iconBg: string; iconColor: string; border: string; href: string;
+}> = [
+  { Icon: MessageCircle, title: 'WhatsApp', sub: 'Fastest response', subColor: '#22c55e', iconBg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', iconColor: '#16a34a', border: '#bbf7d0', href: `https://wa.me/${WA_NUMBER}?text=Hi Sanjai, I need a website!` },
+  { Icon: Mail,          title: 'Email',    sub: EMAIL,              subColor: '#888',    iconBg: 'linear-gradient(135deg, #f5f5f0 0%, #e8e8e3 100%)', iconColor: '#555',    border: '#e8e8e3', href: `mailto:${EMAIL}` },
 ] as const;
 
 /* ─── Main Contact section ──────────────── */
@@ -506,108 +536,219 @@ export default memo(function Contact() {
           transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Col 1 — info */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {CONTACT_CARDS.map(({ Icon, title, sub, subColor, iconBg, iconColor, border, href }) => (
-              <a
+              <motion.a
                 key={title} href={href}
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
                 aria-label={`Contact via ${title}`}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 14,
-                  background: '#fff', border: `1.5px solid ${border}`,
-                  borderRadius: 16, padding: '14px 16px',
-                  transition: 'box-shadow 0.22s ease, transform 0.22s ease',
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.9) 100%)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: `1px solid ${border}`,
+                  borderRadius: 18, padding: '16px 18px',
                   textDecoration: 'none',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
+                  position: 'relative', overflow: 'hidden',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = ''; e.currentTarget.style.transform = ''; }}
+                whileHover={{ y: -3, scale: 1.01, boxShadow: '0 8px 28px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)' }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: 11, background: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon size={17} color={iconColor} aria-hidden="true" />
-                </div>
+                <motion.div
+                  style={{
+                    width: 44, height: 44, borderRadius: 13, background: iconBg,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                  }}
+                  whileHover={{ scale: 1.08, rotate: 3 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <Icon size={18} color={iconColor} aria-hidden="true" />
+                </motion.div>
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontWeight: 700, fontSize: 14, color: '#111' }}>{title}</div>
                   <div style={{ fontSize: 12, color: subColor, marginTop: 2, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sub}</div>
                 </div>
-              </a>
+              </motion.a>
             ))}
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, background: '#fff', border: '1.5px solid #e8e8e3', borderRadius: 16, padding: '14px 16px' }}>
-              <div style={{ width: 40, height: 40, borderRadius: 11, background: '#f5f5f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <MapPin size={17} color="#555" aria-hidden="true" />
+            <motion.div
+              style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.9) 100%)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid #e8e8e3',
+                borderRadius: 18, padding: '16px 18px',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
+              }}
+              whileHover={{ y: -2 }}
+              transition={{ duration: 0.25 }}
+            >
+              <div style={{ width: 44, height: 44, borderRadius: 13, background: 'linear-gradient(135deg, #f5f5f0 0%, #e8e8e3 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <MapPin size={18} color="#555" aria-hidden="true" />
               </div>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 14, color: '#111' }}>Location</div>
                 <div style={{ fontSize: 12, color: '#aaa', marginTop: 2 }}>Salem, TN · Remote OK</div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Trust signals */}
-            <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 16, padding: '16px 18px' }}>
+            <motion.div
+              style={{
+                background: 'linear-gradient(135deg, rgba(240,253,244,0.98) 0%, rgba(220,252,231,0.9) 100%)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid #bbf7d0',
+                borderRadius: 18, padding: '18px 20px',
+                boxShadow: '0 2px 12px rgba(34,197,94,0.06), inset 0 1px 0 rgba(255,255,255,0.6)',
+              }}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
               {['7-day delivery guaranteed', '100% satisfaction rate', '1 month free support', 'No payment upfront'].map((t, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#15803d', fontWeight: 600, marginBottom: i < 3 ? 9 : 0 }}>
-                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} aria-hidden="true" />
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#15803d', fontWeight: 600, marginBottom: i < 3 ? 10 : 0 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', flexShrink: 0, boxShadow: '0 0 6px rgba(34,197,94,0.4)' }} aria-hidden="true" />
                   {t}
                 </div>
               ))}
-            </div>
+            </motion.div>
 
-            <nav aria-label="Social media links" style={{ display: 'flex', gap: 8, paddingTop: 4 }}>
+            <nav aria-label="Social media links" style={{ display: 'flex', gap: 10, paddingTop: 4 }}>
               {SOCIAL_LINKS.map(({ Icon, href, label }) => (
-                <a
+                <motion.a
                   key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                  style={{ width: 40, height: 40, borderRadius: 11, background: '#fff', border: '1.5px solid #e8e8e3', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.2s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.color = '#fff'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#e8e8e3'; e.currentTarget.style.color = '#666'; }}
+                  style={{
+                    width: 44, height: 44, borderRadius: 13,
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.9) 100%)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    border: '1px solid #e8e8e3',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
+                  }}
+                  whileHover={{
+                    background: 'linear-gradient(135deg, #111 0%, #222 100%)',
+                    borderColor: '#111', color: '#fff',
+                    y: -2, boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+                  }}
+                  transition={{ duration: 0.22 }}
                 >
-                  <Icon size={15} aria-hidden="true" />
-                </a>
+                  <Icon size={16} aria-hidden="true" />
+                </motion.a>
               ))}
             </nav>
           </div>
 
           {/* Col 2 — Contact form */}
-          <div style={{ background: '#fff', borderRadius: 20, padding: 'clamp(22px, 3vw, 32px)', border: '1.5px solid #e8e8e3', position: 'relative' }}>
-            <h3 className="display" style={{ fontWeight: 800, fontSize: 18, color: '#111', marginBottom: 22 }}>
+          <motion.div
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.92) 100%)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              borderRadius: 24, padding: 'clamp(24px, 3vw, 32px)',
+              border: '1px solid rgba(255,255,255,0.6)',
+              position: 'relative',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,0.8)',
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15, duration: 0.55 }}
+          >
+            {/* Inner highlight */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute', top: 0, left: 0, right: 0, height: '35%',
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)',
+                borderRadius: '24px 24px 0 0',
+                pointerEvents: 'none',
+              }}
+            />
+            <h3 className="display" style={{ fontWeight: 800, fontSize: 18, color: '#111', marginBottom: 22, position: 'relative' }}>
               Send an Enquiry
             </h3>
             <ContactForm />
-          </div>
+          </motion.div>
 
           {/* Col 3 — AI */}
-          <div style={{ background: '#fff', borderRadius: 20, padding: 'clamp(22px, 3vw, 28px)', border: '1.5px solid #e8e8e3', display: 'flex', flexDirection: 'column' }}>
-            <h3 className="display" style={{ fontWeight: 800, fontSize: 18, color: '#111', marginBottom: 16 }}>
+          <motion.div
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.92) 100%)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              borderRadius: 24, padding: 'clamp(24px, 3vw, 28px)',
+              border: '1px solid rgba(255,255,255,0.6)',
+              display: 'flex', flexDirection: 'column',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,0.8)',
+              position: 'relative',
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.25, duration: 0.55 }}
+          >
+            {/* Inner highlight */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute', top: 0, left: 0, right: 0, height: '35%',
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)',
+                borderRadius: '24px 24px 0 0',
+                pointerEvents: 'none',
+              }}
+            />
+            <h3 className="display" style={{ fontWeight: 800, fontSize: 18, color: '#111', marginBottom: 16, position: 'relative' }}>
               Ask Me Anything
             </h3>
             <AIAssistant />
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Footer strip */}
-        <footer style={{
-          borderTop: '1px solid #e5e5e0', marginTop: 'clamp(48px, 7vw, 72px)', paddingTop: 32,
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
-        }}>
-          <div className="display" style={{ fontWeight: 800, fontSize: 20, color: '#111', letterSpacing: '-0.03em' }}>sanjai</div>
-          <div style={{ fontSize: 12, color: '#ccc' }}>© 2026 Sanjai G · Web Designer &amp; Developer · Salem, TN</div>
+        <motion.footer
+          style={{
+            borderTop: '1px solid rgba(0,0,0,0.06)',
+            marginTop: 'clamp(48px, 7vw, 72px)', paddingTop: 32,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
+          }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          <motion.div
+            className="display"
+            style={{ fontWeight: 800, fontSize: 20, color: '#111', letterSpacing: '-0.03em' }}
+            whileHover={{ scale: 1.02 }}
+          >
+            sanjai
+          </motion.div>
+          <div style={{ fontSize: 12, color: '#aaa' }}>© 2026 Sanjai G · Web Designer &amp; Developer · Salem, TN</div>
           <nav aria-label="Footer navigation" style={{ display: 'flex', gap: 20 }}>
             {(['services', 'projects', 'contact'] as const).map(id => (
-              <button
+              <motion.button
                 key={id} type="button"
                 onClick={() => {
                   const el = document.getElementById(id);
                   if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 64, behavior: 'smooth' });
                 }}
-                style={{ background: 'none', border: 'none', fontSize: 13, color: '#bbb', cursor: 'pointer', textTransform: 'capitalize', fontFamily: 'inherit', transition: 'color 0.2s ease', padding: '4px 0' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#111'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#bbb'; }}
+                style={{ background: 'none', border: 'none', fontSize: 13, color: '#aaa', cursor: 'pointer', textTransform: 'capitalize', fontFamily: 'inherit', padding: '4px 0' }}
+                whileHover={{ color: '#111' }}
+                transition={{ duration: 0.2 }}
               >
                 {id}
-              </button>
+              </motion.button>
             ))}
           </nav>
-        </footer>
+        </motion.footer>
       </div>
     </section>
   );
