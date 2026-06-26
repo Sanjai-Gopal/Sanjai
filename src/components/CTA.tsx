@@ -1,5 +1,6 @@
 import React, { memo, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { CTABg } from './BackgroundElements';
 import { MessageCircle, Mail } from 'lucide-react';
 
 const TRUST_POINTS = ['No advance needed', 'Revision included', 'Delivered in 7 days', '1 month free support'];
@@ -90,49 +91,7 @@ export default memo(function CTA() {
         overflow: 'hidden',
       }}
     >
-      {/* Dark background layer */}
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        {/* Primary green glow top-center */}
-        <div style={{
-          position: 'absolute', top: '-30%', left: '50%', transform: 'translateX(-50%)',
-          width: 900, height: 600,
-          background: 'radial-gradient(ellipse at center, rgba(34,197,94,0.18) 0%, rgba(34,197,94,0.06) 40%, transparent 70%)',
-          filter: 'blur(40px)',
-        }} />
-        {/* Left accent glow */}
-        <div style={{
-          position: 'absolute', top: '20%', left: '-10%',
-          width: 500, height: 400,
-          background: 'radial-gradient(ellipse at center, rgba(34,197,94,0.10) 0%, transparent 65%)',
-          filter: 'blur(50px)',
-        }} />
-        {/* Right accent glow */}
-        <div style={{
-          position: 'absolute', top: '20%', right: '-10%',
-          width: 500, height: 400,
-          background: 'radial-gradient(ellipse at center, rgba(34,197,94,0.10) 0%, transparent 65%)',
-          filter: 'blur(50px)',
-        }} />
-        {/* Subtle green dot grid */}
-        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.06 }} xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="cta-dots" width="40" height="40" patternUnits="userSpaceOnUse">
-              <circle cx="20" cy="20" r="1" fill="#22c55e" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#cta-dots)" />
-        </svg>
-        {/* Vignette edges */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(0,0,0,0.5) 100%)',
-        }} />
-        {/* Bottom fade */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: 100,
-          background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.3))',
-        }} />
-      </div>
+      <CTABg />
 
       <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
         <motion.div
