@@ -718,9 +718,10 @@ export const CTABg = memo(() => {
 
   return (
     <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+      {/* Dark base — CTA is a dark premium section */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(160deg, #f2f2ee 0%, #fafaf8 50%, #f5f5f0 100%)',
+        background: 'linear-gradient(160deg, #0d0d0d 0%, #111111 50%, #0a0a0a 100%)',
       }} />
 
       {!reduced && (
@@ -733,7 +734,7 @@ export const CTABg = memo(() => {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(34,197,94,0.06) 0%, transparent 60%)',
+            background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(34,197,94,0.08) 0%, transparent 60%)',
           }} />
         </motion.div>
       )}
@@ -741,10 +742,10 @@ export const CTABg = memo(() => {
       <div style={{
         position: 'absolute', top: '-10%', left: '50%', transform: 'translateX(-50%)',
         width: '120%', height: '70%',
-        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.05) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(34,197,94,0.06) 0%, transparent 65%)',
       }} />
 
-      <Grid color="rgba(34,197,94,0.025)" size={60} />
+      <Grid color="rgba(34,197,94,0.04)" size={60} />
 
       {!reduced && (
         <motion.div
@@ -755,7 +756,7 @@ export const CTABg = memo(() => {
           }}
         >
           <FloatingOrb size={500} top="-180px" left="50%"
-            color="radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 68%)"
+            color="radial-gradient(circle, rgba(34,197,94,0.10) 0%, transparent 68%)"
             dur={20} delay={0} />
         </motion.div>
       )}
@@ -763,28 +764,28 @@ export const CTABg = memo(() => {
       {!reduced && (
         <>
           <FloatingOrb size={300} top="40%" left="-60px"
-            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
+            color="radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)"
             dur={15} delay={3} />
           <FloatingOrb size={300} top="40%" left="75%"
-            color="radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)"
+            color="radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)"
             dur={17} delay={6} />
         </>
       )}
 
       {!reduced && (
         <>
-          <Ring3D size={240} top="-80px" left="50%" color="rgba(34,197,94,0.05)" dur={40} />
-          <Ring3D size={350} top="-140px" left="50%" color="rgba(34,197,94,0.025)" dur={55} delay={5} />
+          <Ring3D size={240} top="-80px" left="50%" color="rgba(34,197,94,0.08)" dur={40} />
+          <Ring3D size={350} top="-140px" left="50%" color="rgba(34,197,94,0.04)" dur={55} delay={5} />
         </>
       )}
 
-      {!reduced && <Particles3D count={10} color="rgba(34,197,94,0.25)" />}
+      {!reduced && <Particles3D count={10} color="rgba(34,197,94,0.3)" />}
 
-      <Noise opacity={0.015} />
+      <Noise opacity={0.04} />
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 75% 65% at 50% 50%, transparent 40%, rgba(0,0,0,0.04) 100%)',
+        background: 'radial-gradient(ellipse 75% 65% at 50% 50%, transparent 40%, rgba(0,0,0,0.4) 100%)',
       }} />
     </div>
   );

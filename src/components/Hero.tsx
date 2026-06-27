@@ -439,12 +439,21 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
   const [txt, setTxt] = useState('');
   const [del, setDel] = useState(false);
   const [reduced, setReduced] = useState(false);
+  const [isWide, setIsWide] = useState(() => window.innerWidth >= 1100);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     setReduced(mq.matches);
     const fn = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener('change', fn);
+    return () => mq.removeEventListener('change', fn);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1100px)');
+    setIsWide(mq.matches);
+    const fn = (e: MediaQueryListEvent) => setIsWide(e.matches);
     mq.addEventListener('change', fn);
     return () => mq.removeEventListener('change', fn);
   }, []);
@@ -498,10 +507,9 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
         </>
       )}
 
-      {/* Floating glass panels — hidden on mobile to prevent overlap */}
-      {!reduced && (
-        <div className="hero-floating-panels">
-          {/* Panel 1 — Project status */}
+      {/* Floating glass panels — desktop only (>= 1100px) */}
+      {!reduced && isWide && (
+        <>
           <FloatingGlassPanel delay={0.3} floatY={-12} rotate={-6} style={{ top: '62%', left: '2%', width: 110, zIndex: 1 }}>
             <div style={{ padding: '12px 14px' }}>
               <div style={{ fontSize: 8, fontWeight: 700, color: '#999', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>Status</div>
@@ -513,7 +521,6 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
             </div>
           </FloatingGlassPanel>
 
-          {/* Panel 2 — Delivery */}
           <FloatingGlassPanel delay={0.55} floatY={-10} rotate={5} style={{ top: '58%', right: '2%', width: 100, zIndex: 1 }}>
             <div style={{ padding: '12px 14px' }}>
               <div style={{ fontSize: 8, fontWeight: 700, color: '#999', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>Delivery</div>
@@ -521,7 +528,7 @@ export default memo(function Hero({ onDown }: { onDown: () => void }) {
               <div style={{ fontSize: 9, color: '#777', marginTop: 2 }}>Guaranteed</div>
             </div>
           </FloatingGlassPanel>
-        </div>
+        </>
       )}
 
       <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 2, width: '100%' }}>

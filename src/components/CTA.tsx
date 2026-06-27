@@ -45,8 +45,8 @@ const MagneticButton = memo(({ children, href, primary = false, ariaLabel }: {
         color: '#fff',
         border: primary ? 'none' : '1px solid rgba(255,255,255,0.15)',
         boxShadow: primary
-          ? '0 8px 32px rgba(34,197,94,0.4), inset 0 1px 0 rgba(255,255,255,0.2)'
-          : '0 4px 16px rgba(0,0,0,0.2)',
+          ? '0 6px 24px rgba(34,197,94,0.28), inset 0 1px 0 rgba(255,255,255,0.18)'
+          : '0 2px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)',
         position: 'relative', overflow: 'hidden',
         x, y,
       }}
@@ -159,7 +159,7 @@ export default memo(function CTA() {
           <motion.p
             style={{
               fontSize: 'clamp(14px, 2vw, 17px)',
-              color: 'rgba(255,255,255,0.5)',
+              color: 'rgba(255,255,255,0.7)',
               lineHeight: 1.75,
               maxWidth: 480,
               margin: '0 auto clamp(32px, 5vw, 44px)',
@@ -228,7 +228,7 @@ export default memo(function CTA() {
                   background: '#22c55e', display: 'inline-block', flexShrink: 0,
                   boxShadow: '0 0 6px rgba(34,197,94,0.5)',
                 }} aria-hidden="true" />
-                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 500 }}>
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>
                   {t}
                 </span>
               </motion.div>
