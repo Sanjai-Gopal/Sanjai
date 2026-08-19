@@ -1,12 +1,14 @@
 <div align="center">
 
-# Sanjai Gopal — Portfolio
+# Sanjai — Freelance Web Development
 
-### Modern personal portfolio built with Next.js, Magic UI & Framer Motion.
+### Modern websites designed to help businesses grow.
 
-[![Live](https://img.shields.io/badge/Live%20Website-Visit-111111?style=for-the-badge&logo=vercel&logoColor=white)](https://sanjai-alpha.vercel.app/)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Blue?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Live Website](https://img.shields.io/badge/Live%20Website-Visit-111111?style=for-the-badge&logo=vercel&logoColor=white)](https://sanjai-alpha.vercel.app/)
+
+<br />
+
+![Website Preview](./docs/portfolio-preview.png)
 
 </div>
 
@@ -14,34 +16,31 @@
 
 ## ✦ About
 
-A modern, responsive portfolio website designed to present projects, technical skills, certifications, achievements, freelance services, and an interactive AI portfolio assistant.
+A modern freelance web-development website built to showcase services, work, client-focused solutions, and the development process.
 
-Built with a focus on **clean design, smooth interactions, responsiveness, and performance**.
+The design focuses on **clarity, conversion, responsive design, and premium user experience**.
 
 ---
 
 ## ✨ Features
 
 - Modern responsive UI
-- Light / dark theme
-- Magic UI components
-- Framer Motion animations
-- Interactive project showcase
-- Certifications & achievements
-- Freelancing section
-- Resume download
-- GitHub & LinkedIn integration
-- **Ask Sanjai** AI chatbot
-- Mobile optimized
-- SEO & performance focused
+- Premium visual design
+- Smooth animations & micro-interactions
+- Services showcase
+- Portfolio/work showcase
+- Client-focused sections
+- Reviews/testimonials
+- Contact & booking CTA
+- Mobile responsive
+- Performance optimized
 
 ---
 
-## 🛠 Tech Stack
+## 🛠 Built With
 
 `Next.js` · `React` · `TypeScript`  
-`Tailwind CSS` · `Magic UI` · `shadcn/ui`  
-`Framer Motion` · `Vercel` · `Hugging Face`
+`Tailwind CSS` · `Framer Motion` · `Vercel`
 
 ---
 
